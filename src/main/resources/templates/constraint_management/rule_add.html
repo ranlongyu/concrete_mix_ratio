@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <form th:action="@{/rule/add}" method="post">
+        <!--发送put请求修改规则-->
+        <!--
+        1、SpringMVC中配置HiddenHttpMethodFilter;（SpringBoot自动配置好的）
+        2、页面创建一个post表单
+        3、创建一个input项，name="_method";值就是我们指定的请求方式
+        -->
+        <!--
+        1、由于进行了添加修改二合一，所以要通过rule是否为空来判断是否是修改页面
+        2、th:if="${rule!=null}"表示如果条件成立，这个节点才生效
+        -->
+        <input type="hidden" name="_method" value="put" th:if="${rule!=null}"/>
+        <input type="hidden" name="id" th:if="${rule!=null}" th:value="${rule.id}"/>
+        <div class="form-group">
+            <label>被约束项</label>
+            <select name="constraineditem" type="text" class="form-control" placeholder=""
+                    th:value="${rule!=null}?${rule.constraineditem}">
+                <option>混凝土品种</option>
+                <option>强度等级</option>
+                <option>抗渗等级</option>
+                <option>材料要求</option>
+                <option>限制膨胀率</option>
+                <option>坍落度</option>
+                <option>扩展度</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>被约束项值</label>
+            <input name="constraineditemvalue" type="text" class="form-control" placeholder=""
+                   th:value="${rule!=null}?${rule.constraineditemvalue}"/>
+        </div>
+        <div class="form-group">
+            <label>依赖项</label>
+            <select name="dependency" type="text" class="form-control" placeholder=""
+                    th:value="${rule!=null}?${rule.dependency}">
+                <option></option>
+                <option>混凝土品种</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>依赖项值</label>
+            <select name="dependencyvalue" type="text" class="form-control" placeholder=""
+                    th:value="${rule!=null}?${rule.dependencyvalue}">
+                <option></option>
+                <option>常规混凝土</option>
+                <option>抗渗混凝土</option>
+                <option>防水混凝土</option>
+                <option>补偿收缩混凝土</option>
+                <option>水下混凝土</option>
+                <option>大体积混凝土</option>
+                <option>透水混凝土</option>
+                <option>自密实混凝土</option>
+                <option>铁路混凝土</option>
+                <option>钢纤维混凝土</option>
+                <option>聚丙烯纤维混凝土</option>
+                <option>轻骨料混凝土</option>
+                <option>重混凝土</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>约束</label>
+            <input name="constraint" type="text" class="form-control" placeholder="非空"
+                   th:value="${rule!=null}?${rule.constraint}"/>
+        </div>
+        <button type="submit" class="btn btn-primary" th:text="${rule!=null}?'修改':'添加'">添加</button>
+    </form>
+</main>
+
+</body>
+</html>

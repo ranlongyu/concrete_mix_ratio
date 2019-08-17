@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+
+    <title>智能设计</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 智能设计</nav>
+<div class="page-container">
+    <div class="text-c"> 日期范围：
+        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin"
+               class="input-text Wdate" style="width:120px;"/>
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax"
+               class="input-text Wdate" style="width:120px;"/>
+        <input type="text" class="input-text" style="width:250px" placeholder="输入条目名称" id="1" name=""/>
+        <button type="submit" class="btn btn-success radius" id="2" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索
+        </button>
+    </div>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l"><a href="javascript:;" onclick="datadel()"
+                                                               class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+                <a href="javascript:;" onclick="member_add('添加设计','/design/add','1000','600')"
+                   class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加设计</a></span> <span
+            class="r">共有数据：<strong>88</strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th><input type="checkbox" name="" value=""/></th>
+                <th>时间段</th>
+                <th>混凝土品种</th>
+                <th>强度等级</th>
+                <th>抗渗等级</th>
+                <th>材料要求</th>
+                <th>限制膨胀率</th>
+                <th>坍落度</th>
+                <th>扩展度</th>
+                <th>耐久性技术要求</th>
+                <th>其他技术要求</th>
+                <th>水泥等级</th>
+                <th>水泥生产厂家</th>
+                <th>减水剂等级</th>
+                <th>粉煤灰类别</th>
+                <th>粉煤灰等级</th>
+                <th>矿渣粉等级</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="i:${design_records}">
+                <td><input type="checkbox" name="" value=""/></td>
+                <td th:text="${i.period}"></td>
+                <td th:text="${i.concretevariety}"></td>
+                <td th:text="${i.powerlevel}"></td>
+                <td th:text="${i.impermerating}"></td>
+                <td th:text="${i.materialrequirements}"></td>
+                <td th:text="${i.limitexpansionrate}"></td>
+                <td th:text="${i.slump}"></td>
+                <td th:text="${i.expansion}"></td>
+                <td th:text="${i.durrequirements}"></td>
+                <td th:text="${i.otherrequirements}"></td>
+                <td th:text="${i.cementgrade}"></td>
+                <td th:text="${i.cementmanufacturer}"></td>
+                <td th:text="${i.reducewaterlevel}"></td>
+                <td th:text="${i.flyashcategory}"></td>
+                <td th:text="${i.flyashgrade}"></td>
+                <td th:text="${i.slagpowdergrade}"></td>
+                <td class="td-manage">
+                    <a title="删除"
+                       th:attr="del_uri=@{/design/delete/}+${i.id}" class="deleteBtn">
+                        <i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <form id="deleteDesignForm" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+        </form>
+    </div>
+</div>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#check_xi1").click(function () {
+            alert('yes');
+            if (this.checked) {
+                $("#xi1").disabled = false;
+            }
+        });
+        $("#check_xi2").click(function () {
+            if (this.checked) {
+                $("#xi2").disabled = false;
+            }
+        });
+        $("#check_cu1").click(function () {
+            if (this.checked) {
+                $("#cu1").disabled = false;
+            }
+        });
+        $("#check_cu2").click(function () {
+            if (this.checked) {
+                $("#cu2").disabled = false;
+            }
+        });
+    });
+
+    function checkBox_xi1() {
+        var xi1 = document.getElementById("check_xi1");
+        var xi_price = document.getElementById("Fine aggregate price 1");
+        if (xi1.checked) {
+            document.getElementById("xi1").disabled = false;
+            xi_price.disabled = false;
+            xi_price.value = '';
+            xi_price.style.backgroundColor = '#ffffff';
+        }
+        else {
+            document.getElementById("Fine aggregate variety 1").value = 'null';
+            document.getElementById("Fine aggregate model 1").value = "null";
+            document.getElementById("Fineness modulus 1").value = "";
+            document.getElementById("xi1").disabled = true;
+            xi_price.disabled = true;
+            xi_price.value = '空';
+            xi_price.style.backgroundColor = '#7e8795';
+        }
+    }
+
+    function checkBox_xi2() {
+        var xi1 = document.getElementById("check_xi2");
+        var xi_price = document.getElementById("Fine aggregate price 2");
+        if (xi1.checked) {
+            document.getElementById("xi2").disabled = false;
+            xi_price.disabled = false;
+            xi_price.value = '';
+            xi_price.style.backgroundColor = '#ffffff';
+        }
+        else {
+            document.getElementById("Fine aggregate variety 2").value = "null";
+            document.getElementById("Fine aggregate model 2").value = "null";
+            document.getElementById("Fineness modulus 2").value = "";
+            document.getElementById("xi2").disabled = true;
+            xi_price.disabled = true;
+            xi_price.value = '空';
+            xi_price.style.backgroundColor = '#7e8795';
+        }
+    }
+
+    function checkBox_xi3() {
+        var xi1 = document.getElementById("check_xi3");
+        var xi_price = document.getElementById("Fine aggregate price 3");
+        if (xi1.checked) {
+            document.getElementById("xi3").disabled = false;
+            xi_price.disabled = false;
+            xi_price.value = '';
+            xi_price.style.backgroundColor = '#ffffff';
+        }
+        else {
+            document.getElementById("Fine aggregate variety 3").value = "null";
+            document.getElementById("Fine aggregate model 3").value = "null";
+            document.getElementById("Fineness modulus 3").value = "";
+            document.getElementById("xi3").disabled = true;
+            xi_price.disabled = true;
+            xi_price.value = '空';
+            xi_price.style.backgroundColor = '#7e8795';
+        }
+    }
+
+    function checkBox_cu1() {
+        var xi1 = document.getElementById("check_cu1");
+        var cu_price = document.getElementById("Coarse aggregate price 1");
+        if (xi1.checked) {
+            document.getElementById("cu1").disabled = false;
+            cu_price.disabled = false;
+            cu_price.value = '';
+            cu_price.style.backgroundColor = '#ffffff';
+        }
+        else {
+            document.getElementById("Coarse aggregate variety 1").value = "null";
+            document.getElementById("Coarse aggregate model 1").value = "null";
+            document.getElementById("lower model 1").value = "";
+            document.getElementById("upper model 1").value = "";
+            document.getElementById("cu1").disabled = true;
+            cu_price.disabled = true;
+            cu_price.value = '空';
+            cu_price.style.backgroundColor = '#7e8795';
+        }
+    }
+
+    function cuModel_1() {
+        if (document.getElementById("Coarse aggregate model 1").value != "手动") {
+            document.getElementById("粗型号1").disabled = true;
+            document.getElementById("lower model 1").value = "";
+            document.getElementById("upper model 1").value = "";
+        } else {
+            document.getElementById("粗型号1").disabled = false;
+        }
+    }
+
+    function checkBox_cu2() {
+        var xi1 = document.getElementById("check_cu2");
+        var cu_price = document.getElementById("Coarse aggregate price 2");
+        if (xi1.checked) {
+            document.getElementById("cu2").disabled = false;
+            cu_price.disabled = false;
+            cu_price.value = '';
+            cu_price.style.backgroundColor = '#ffffff';
+        }
+        else {
+            document.getElementById("Coarse aggregate variety 2").value = "null";
+            document.getElementById("Coarse aggregate model 2").value = "null";
+            document.getElementById("cu2").disabled = true;
+            cu_price.disabled = true;
+            cu_price.value = '空';
+            cu_price.style.backgroundColor = '#7e8795';
+        }
+    }
+
+    function cuModel_2() {
+        if (document.getElementById("Coarse aggregate model 2").value != "手动") {
+            document.getElementById("粗型号2").disabled = true;
+            document.getElementById("lower model 2").value = "";
+            document.getElementById("upper model 2").value = "";
+        } else {
+            document.getElementById("粗型号2").disabled = false;
+        }
+    }
+
+    function checkBox_cu3() {
+        var xi1 = document.getElementById("check_cu3");
+        var cu_price = document.getElementById("Coarse aggregate price 3");
+        if (xi1.checked) {
+            document.getElementById("cu3").disabled = false;
+            cu_price.disabled = false;
+            cu_price.value = '';
+            cu_price.style.backgroundColor = '#ffffff';
+        }
+        else {
+            document.getElementById("Coarse aggregate variety 3").value = "null";
+            document.getElementById("Coarse aggregate model 3").value = "null";
+            document.getElementById("cu3").disabled = true;
+            cu_price.disabled = true;
+            cu_price.value = '空';
+            cu_price.style.backgroundColor = '#7e8795';
+        }
+    }
+
+    function cuModel_3() {
+        if (document.getElementById("Coarse aggregate model 3").value != "手动") {
+            document.getElementById("粗型号3").disabled = true;
+            document.getElementById("lower model 3").value = "";
+            document.getElementById("upper model 3").value = "";
+        } else {
+            document.getElementById("粗型号3").disabled = false;
+        }
+    }
+
+    function checkBox_kang() {
+        var kang = document.getElementById("checkbox2");
+        if (kang.checked) {
+            document.getElementById("抗渗s").style.backgroundColor = "#ffffff";
+            document.getElementById("抗渗s").disabled = false;
+        } else {
+            document.getElementById("抗渗s").value = "null";
+            document.getElementById("抗渗s").style.backgroundColor = "#eeeeee";
+            document.getElementById("抗渗s").disabled = true;
+        }
+    }
+
+    function checkBox_bu() {
+        var bu = document.getElementById("checkbox4");
+        if (bu.checked) {
+            document.getElementById("限制膨胀率s").style.backgroundColor = "#ffffff";
+            document.getElementById("限制膨胀率s").disabled = false;
+        } else {
+            document.getElementById("限制膨胀率s").value = "null";
+            document.getElementById("限制膨胀率s").style.backgroundColor = "#eeeeee";
+            document.getElementById("限制膨胀率s").disabled = true;
+        }
+    }
+
+    function gangxianwei() {
+        var gangbox = document.getElementById("checkbox10");
+        var gang = document.getElementById("checkbox20");
+        if (gangbox.checked) {
+            gang.disabled = false;
+        } else {
+            gang.value = "null";
+            gang.disabled = true;
+        }
+    }
+
+    function jubingxi() {
+        var jubox = document.getElementById("checkbox11");
+        var ju = document.getElementById("checkbox22");
+        if (jubox.checked) {
+            ju.disabled = false;
+        } else {
+            ju.value = "null";
+            ju.disabled = true;
+        }
+    }
+
+    var rules = {};
+    $(function () {
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        })
+    });
+
+    $(function () {
+        $('.table-sort').dataTable({
+            "aaSorting": [[1, "desc"]],//默认第几个排序
+            "bStateSave": true,//状态保存
+            "aoColumnDefs": [
+                //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+                {"orderable": false, "aTargets": [0, 8, 9]}// 制定列不参与排序
+            ]
+        });
+
+    });
+
+    function member_add(title, url_new, w, h) {
+        $.ajax({
+            type: 'GET',         //请求方式
+            //data:{type:2,sid:25},   //请求数据
+            url: '/design/add',       //接口地址
+            dataType: 'json',        //数据类型
+            success: function (data) {//成功回调函数
+                //拼接字符串
+                //for(var key in data.choose){
+                //var jsonObj = JSON.parse(data.choose[key]);
+                //   alert(data.choose[key]);
+                //}
+                //console.log(data.choose);
+                var html = '<form method="POST" th:action="@{/design/submit}" name="form1" target="_bland">\
+        <table class="table table-hover" id="selectedCondition"><tr>\
+                <td><h4>时间参数</h4></td>\
+                <td></td>\
+            </tr>\
+            <tr>\
+                <td style="width:150px;"><span class="checkbox-inline" style="font-size:15px">时间段：</span></td>\
+                <td>\
+                    <div class="form-inline">\
+                        <select class="form-control" name="时间段">\
+                            <option value="" checked="checked">不限时间段</option>\
+                            <option value="12-2">低温段12-2月</option>\
+                            <option value="3-4,10-11">适温段3-4月或10-11月</option>\
+                            <option value="5-9">高温段5-9月</option>\
+                        </select>\
+                        <label>评分规则：</label>';
+                var select_score = '<select class="form-control input-sm" id="" name="score_number">';
+                for (var score in data.scoring_rules) {
+                    var item = data.scoring_rules[score];
+                    //console.log(item.id);
+                    select_score += '<option value="' + item.id + '">' + '评分规则' + item.id + '</option>';
+                }
+                html += select_score + '</select>\
+                    </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td><h4>技术参数</h4></td>\
+                <td></td>\
+            </tr>\
+            <tr>\
+                <td><span class="checkbox-inline" style="font-size:15px">混凝土品种<span style="color:red">*</span>：</span>\
+                </td>\
+                <td>\
+                    <div class="formControls col-xs-8 col-sm-9">\
+                        <div class="check-box"><input type="checkbox" id="checkbox1" name="混凝土品种" value="常规混凝土"/> <label for="checkbox1">常规混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox2" name="混凝土品种" value="抗渗混凝土" onclick="checkBox_kang();"/> <label for="checkbox2">抗渗混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox3" name="混凝土品种" value="防水混凝土" /> <label for="checkbox3">防水混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox4" name="混凝土品种" value="补偿收缩混凝土" onclick="checkBox_bu();"/>\
+                            <label for="checkbox4">补偿收缩混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox5" name="混凝土品种" value="水下混凝土"/> <label for="checkbox5">水下混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox6" name="混凝土品种" value="大体积混凝土"/>\
+                            <label for="checkbox6">大体积混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox7" name="混凝土品种" value="透水混凝土"/> <label for="checkbox7">透水混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox8" name="混凝土品种" value="自密实混凝土"/>\
+                            <label for="checkbox8">自密实混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox9" name="混凝土品种" value="铁路混凝土"/> <label for="checkbox9">铁路混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox10" name="混凝土品种" value="钢纤维混凝土" onclick="gangxianwei();"/>\
+                            <label for="checkbox10">钢纤维</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox11" name="混凝土品种" value="聚丙烯纤维混凝土" onclick="jubingxi();"/>\
+                            <label for="checkbox11">聚丙烯纤维</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox12" name="混凝土品种" value="轻骨料混凝土"/>\
+                            <label for="checkbox12">轻骨料混凝土</label></div>\
+                        <div class="check-box"><input type="checkbox" id="checkbox13" name="混凝土品种" value="重混凝土"/> <label for="checkbox13">重混凝土</label></div>\
+                    </div>\
+                </td>\
+            </tr>';
+
+                var temp_str = '<tr>\
+            <td></td>\
+            <td>\
+            <div class="form-inline">\
+            <label class="radio-inline" style="font-size:15px">强度等级<span style="color:red">*</span>：</label>\
+                <select id="强度s" name="强度等级">\
+                    <option id="inlineRadio1" value="C15">C15</option>\
+                    <option id="inlineRadio2" value="C20">C20</option>\
+                    <option id="inlineRadio3" value="C25">C25</option>\
+                    <option id="inlineRadio4" value="C30">C30</option>\
+                    <option id="inlineRadio5" value="C35">C35</option>\
+                    <option id="inlineRadio6" value="C40">C40</option>\
+                    <option id="inlineRadio7" value="C45">C45</option>\
+                    <option id="inlineRadio8" value="C50">C50</option>\
+                    <option id="inlineRadio9" value="C55">C55</option>\
+                    <option id="inlineRadio10" value="C60">C60</option>\
+                    <option id="inlineRadio11" value="C65">C65</option>\
+                    <option id="inlineRadio12" value="C70">C70</option>\
+                    <option id="inlineRadio13" value="C75">C75</option>\
+                    <option id="inlineRadio14" value="C80">C80</option>\
+                </select>\
+                <label class="radio-inline" style="font-size:15px">抗渗等级<span style="color:red">*</span>：</label>\
+                <select id="抗渗s" name="抗渗" style="background-color: #eeeeee" disabled="disabled">\
+                    <option value="null">请选择</option>\
+                    <option id="inlineRadio15" value="P6">P6</option>\
+                    <option id="inlineRadio16" value="P8">P8</option>\
+                    <option id="inlineRadio17" value="P10">P10</option>\
+                    <option id="inlineRadio18" value="P12">P12</option>\
+                </select>\
+            <label class="radio-inline" style="font-size:15px">限制膨胀率：</label>\
+                <select id="限制膨胀率s" name="限制膨胀率" style="background-color: #eeeeee" disabled="disabled">\
+                    <option value="null">请选择</option>\
+                    <option id="inlineRadio19" value="6%">微膨胀6%</option>\
+                    <option id="inlineRadio20" value="8%">微膨胀8%</option>\
+                    <option id="inlineRadio21" value="10%">微膨胀10%</option>\
+                    <option id="inlineRadio22" value="0.015%">0.015%</option>\
+                    <option id="inlineRadio23" value="0.020%">0.020%</option>\
+                    <option id="inlineRadio24" value="0.025%">0.025%</option>\
+                    <option id="inlineRadio25" value="0.030%">0.030%</option>\
+                    <option id="inlineRadio26" value="0.035%">0.035%</option>\
+                    <option id="inlineRadio27" value="0.040%">0.040%</option>\
+                </select>\
+                <label class="radio-inline" style="font-size:15px">坍落度mm：</label>\
+                <select id="坍落度s" name="坍落度">\
+                    <option id="inlineRadio28" value="180±20">180±20</option>\
+                    <option id="inlineRadio29" value="190±20">190±20</option>\
+                    <option id="inlineRadio30" value="200±20">200±20</option>\
+                    <option id="inlineRadio31" value="210±20">210±20</option>\
+                    <option id="inlineRadio32" value="220±20">220±20</option>\
+                </select>\
+                    <label class="radio-inline" style="font-size:15px">扩展度：</label>\
+                <select id="扩展度s" name="扩展度">\
+                    <option id="inlineRadio33" value="450">≥450</option>\
+                    <option id="inlineRadio34" value="500">≥500</option>\
+                    <option id="inlineRadio35" value="550">≥550</option>\
+                    <option id="inlineRadio36" value="600">≥600</option>\
+                </select>\
+                </div>\
+            </td>\
+            </tr>\
+            <tr>\
+                <td>\
+                <span class="checkbox-inline" style="font-size:15px">材料要求<span style="color:red">*</span>：</span>\
+                </td>\
+                <td>\
+                <div class="formControls skin-minimal col-xs-8 col-sm-9">\
+                    <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox14" value="细石"/><label for="checkbox14">细石</label></div>\
+                <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox15" value="低碱水泥"/><label for="checkbox15">低碱水泥</label></div>\
+                <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox16" value="GNA"/><label for="checkbox16">膨胀型号GNA</label></div>\
+                <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox17" value="ZY"/><label for="checkbox17">膨胀型号ZY</label></div>\
+                <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox18" value="UEA"/><label for="checkbox18">膨胀型号UEA</label></div>\
+                <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox19"/>\
+                    <label for="checkbox19">钢纤维掺量：</label><input type="text" disabled="disabled" name="钢纤维掺量" id="checkbox20" style="border-top-style: none;border-right-style: none;border-bottom-style: solid;border-left-style: none;"/><label>KG</label>\
+                </div>\
+                <div class="check-box"><input type="checkbox" name="材料要求" id="checkbox21" value="option2"/><label for="checkbox21">聚丙烯纤维掺量：</label><input type="text" disabled="disabled" name="聚丙烯纤维掺量" id="checkbox22" style="border-top-style:none;border-right-style:none;border-bottom-style:solid;border-left-style:none;"/><label>KG</label>\
+                </div>\
+                </div>\
+                </td>\
+             </tr>';
+
+
+                html = html + temp_str + '<tr>\
+                <td></td>\
+                <td>\
+                <div class="form-inline">\
+                    <div class="form-group">\
+                    <label class="radio-inline" for="naijiu" style="font-size:15px;">耐久性技术要求：</label>\
+                        <textarea style="height:30px;" class="form-control" rows="3" id="naijiu" name="耐久"></textarea>\
+                    </div>\
+                    <div class="form-group">\
+                    <label class="radio-inline" for="qita" style="font-size:15px;">其他技术要求：</label>\
+                        <textarea style="height:30px;" class="form-control" rows="3" id="qita" name="其他"></textarea>\
+                    </div>\
+                 </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td><h4>材料信息</h4></td><td></td>\
+            </tr>\
+            <tr>\
+            <td><span class="checkbox-inline" style="font-size:15px">水泥：</span></td>\
+            <td>\
+                <div class="formControls skin-minimal">\
+                    <div class="col-xs-2" style="display: inline-block;width: 150px;">\
+                        <select class="form-control input-sm" style="width:135px;" id="水泥品种等级" name="水泥品种等级">\
+                            <option value="null"><span style="color:red">*</span>请选择品种等级</option>\
+                            <option value="P·O42.5">P●042.5</option>\
+                            <option value="P·O42.5R">P●042.5R</option>\
+                        </select>\
+                    </div>\
+                    <div class="col-xs-3 form-inline" style="display: inline-block;width: 200px;">\
+                        <span style="margin-left:10px;">28d抗压强度(MPa)</span>\
+                        <input type="text" style="width:50px" class="form-control input-sm" placeholder="" name="水泥28d抗压强度" id="水泥28d抗压强度" />\
+                    </div>\
+                    <div class="col-xs-2" style="display: inline-block;width: 150px;">\
+                        <select class="form-control input-sm" style="width:135px;" id="水泥生产厂家" name="水泥生产厂家">\
+                            <option value="null">请选择生产厂家</option>\
+                            <option value="重庆锦赐程商贸有限公司">重庆锦赐程商贸有限公司</option>\
+                            <option value="重庆小南海水泥厂">重庆小南海水泥厂</option>\
+                            <option value="重庆戈鹰物资有限公司">重庆戈鹰物资有限公司</option>\
+                        </select>\
+                    </div>\
+                </div>\
+            </td>\
+            </tr>\
+            <tr>\
+                <td><span class="checkbox-inline" style="font-size:15px">细集料：</span></td>\
+                <td>\
+                    <div class="formControls skin-minimal">\
+                        <div class="form-inline"><input type="checkbox" id="check_xi1" name="细集料1" value="细集料1" onclick="checkBox_xi1();"/><label for="细集料1">细集料1</label>\
+                           <fieldset id="xi1" disabled="disabled" class="form-group">\
+                            <select class="form-control input-sm" id="Fine aggregate variety 1" style="width:110px;margin-left:10px;" name="Fine aggregate variety 1">\
+                                <option value="null"><span style="color:red">*</span>请选择品种</option>\
+                                <option value="机制砂">机制砂</option>\
+                                <option value="天然砂">天然砂</option>\
+                            </select>\
+                            <select class="form-control input-sm" id="Fine aggregate model 1" style="width:110px;margin-left:10px;" name="Fine aggregate model 1">\
+                                <option value="null"><span style="color:red">*</span>请选择型号</option>\
+                                <option value="粗砂">粗砂</option>\
+                                <option value="中砂">中砂</option>\
+                                <option value="细砂">细砂</option>\
+                                <option value="特细砂">特细砂</option>\
+                            </select>\
+                            <span style="margin-left:10px;">细度模数:</span>\
+                            <input type="text" style="width:55px;" class="form-control input-sm" name="Fineness modulus 1" id="Fineness modulus 1" placeholder=""/>\
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Finenessgradation1">级配数据</button>\
+                            <div class="modal fade" id="Finenessgradation1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
+                                <div class="modal-dialog" style="z-index:1051;width:350px;">\
+                                    <div class="modal-content">\
+                                        <div class="modal-header">\
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+                                            <h3 class="modal-title" id="myModalLabel">砂的筛分</h3>\
+                                            <div class="modal-body">\
+                                                <table class="table table-bordered">\
+                                                    <tr><td>试样质量(g)</td><td><input type="text" id="Sample quality 1" name="Sample quality 1"/></td></tr>\
+                                                    <tr><td>筛孔尺寸(mm)</td><td>筛余量(g)</td></tr>\
+                                                    <tr><td>4.75</td><td><input type="text" id="allowance 1" name="allowance 1"/></td></tr>\
+                                                    <tr><td>2.36</td><td><input type="text" id="allowance 2" name="allowance 2"/></td></tr>\
+                                                    <tr><td>1.18</td><td><input type="text" id="allowance 3" name="allowance 3"/></td></tr>\
+                                                    <tr><td>0.6</td><td><input type="text" id="allowance 4" name="allowance 4"/></td></tr>\
+                                                    <tr><td>0.3</td><td><input type="text" id="allowance 5" name="allowance 5"/></td></tr>\
+                                                    <tr><td>0.15</td><td><input type="text" id="allowance 6" name="allowance 6"/></td></tr>\
+                                                    <tr><td>0.075</td><td><input type="text" id="allowance 7" name="allowance 7"/></td></tr>\
+                                                    <tr><td>筛底</td><td><input type="text" id="allowance 8" name="allowance 8"/></td></tr>\
+                                                </table>\
+                                            </div>\
+                                            <div class="modal-footer">\
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">完成</button>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            </fieldset>\
+                        </div>\
+                    </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td></td>\
+                <td>\
+                    <div class="formControls skin-minimal">\
+                        <div class="form-inline"><input type="checkbox" id="check_xi2" name="细集料2" value="细集料2" onclick="checkBox_xi2();"/><label for="细集料2">细集料2</label>\
+                            <fieldset id="xi2" disabled="disabled" class="form-group">\
+                            <select class="form-control input-sm" id="Fine aggregate variety 2" style="width:110px;margin-left:10px;" name="Fine aggregate variety 2">\
+                                <option value="null"><span style="color:red">*</span>请选择品种</option>\
+                                <option value="机制砂">机制砂</option>\
+                                <option value="天然砂">天然砂</option>\
+                            </select>\
+                            <select class="form-control input-sm" id="Fine aggregate model 2" style="width:110px;margin-left:10px;" name="Fine aggregate model 2">\
+                                <option value="null"><span style="color:red">*</span>请选择型号</option>\
+                                <option value="粗砂">粗砂</option>\
+                                <option value="中砂">中砂</option>\
+                                <option value="细砂">细砂</option>\
+                                <option value="特细砂">特细砂</option>\
+                            </select>\
+                            <span style="margin-left:10px;">细度模数:</span>\
+                            <input type="text" style="width:55px" class="form-control input-sm" name="Fineness modulus 2" id="Fineness modulus 2" placeholder=""/>\
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Finenessgradation2">级配数据</button>\
+                            <div class="modal fade" id="Finenessgradation2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
+                                <div class="modal-dialog" style="z-index:1051;width:350px;">\
+                                    <div class="modal-content">\
+                                        <div class="modal-header">\
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+                                            <h3 class="modal-title" id="myModalLabel">砂的筛分</h3>\
+                                            <div class="modal-body">\
+                                                <table class="table table-bordered">\
+                                                    <tr><td>试样质量(g)</td><td><input type="text" id="Sample quality 2" name="Sample quality 2"/></td></tr>\
+                                                    <tr><td>筛孔尺寸(mm)</td><td>筛余量(g)</td></tr>\
+                                                    <tr><td>4.75</td><td><input type="text" id="sieve 1" name="sieve 1"/></td></tr>\
+                                                    <tr><td>2.36</td><td><input type="text" id="sieve 2" name="sieve 2"/></td></tr>\
+                                                    <tr><td>1.18</td><td><input type="text" id="sieve 3" name="sieve 3"/></td></tr>\
+                                                    <tr><td>0.6</td><td><input type="text" id="sieve 4" name="sieve 4"/></td></tr>\
+                                                    <tr><td>0.3</td><td><input type="text" id="sieve 5" name="sieve 5"/></td></tr>\
+                                                    <tr><td>0.15</td><td><input type="text" id="sieve 6" name="sieve 6"/></td></tr>\
+                                                    <tr><td>0.075</td><td><input type="text" id="sieve 7" name="sieve 7"/></td></tr>\
+                                                    <tr><td>筛底</td><td><input type="text" id="sieve 8" name="sieve 8"/></td></tr>\
+                                                </table>\
+                                            </div>\
+                                            <div class="modal-footer">\
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">完成</button>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                          </div>\
+                          </fieldset>\
+                        </div>\
+                    </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td><span class="checkbox-inline" style="font-size:15px">粗集料：</span></td>\
+                <td>\
+                    <div class="formControls skin-minimal">\
+                        <div class="form-inline" style="float:left"><input type="checkbox" id="check_cu1" name="粗集料1" value="粗集料1" onclick="checkBox_cu1();"/><label for="粗集料1">粗集料1</label>\
+                            <fieldset id="cu1" disabled="disabled" class="form-group">\
+                            <select class="form-control input-sm" id="Coarse aggregate variety 1" style="width:110px;" name="Coarse aggregate variety 1">\
+                                <option value="null"><span style="color:red">*</span>请选择品种</option>\
+                                <option value="山碎石">山碎石</option>\
+                                <option value="卵碎石">卵碎石</option>\
+                                <option value="卵石">卵石</option></select>\
+                            <select onclick="cuModel_1();" class="form-control input-sm" id="Coarse aggregate model 1" style="width:110px;" name="Coarse aggregate model 1">\
+                                <option value="null"><span style="color:red">*</span>请选择型号</option>\
+                                <option value="5-10">5-10(mm)</option>\
+                                <option value="10-20">10-20(mm)</option>\
+                                <option value="手动">手动输入</option>\
+                            </select>\
+                            <fieldset id="粗型号1" class="form-group" disabled="disabled">\
+                                <span>型号添加</span>\
+                                <input type="text" style="width:55px" class="form-control input-sm" name="lower model 1" id="lower model 1" placeholder=""/>\
+                                <span>-</span>\
+                                <input type="text" style="width:55px" class="form-control input-sm" name="upper model 1" id="upper model 1" placeholder=""/>\
+                            </fieldset>\
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Coarsegradation1">级配数据</button>\
+                            <div class="modal fade" id="Coarsegradation1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
+                                <div class="modal-dialog" style="z-index:1051;width:350px;">\
+                                    <div class="modal-content">\
+                                        <div class="modal-header">\
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+                                            <h3 class="modal-title" id="myModalLabel">石的筛分</h3>\
+                                            <div class="modal-body">\
+                                                <table class="table table-bordered">\
+                                                    <tr><td>筛孔尺寸(mm)</td><td>筛余量(g)</td></tr>\
+                                                    <tr><td>37.5</td><td><input type="text" id="coarse allowance 1" name="coarse allowance 1"/></td></tr>\
+                                                    <tr><td>31.5</td><td><input type="text" id="coarse allowance 2" name="coarse allowance 2"/></td></tr>\
+                                                    <tr><td>26.5</td><td><input type="text" id="coarse allowance 3" name="coarse allowance 3"/></td></tr>\
+                                                    <tr><td>19.0</td><td><input type="text" id="coarse allowance 4" name="coarse allowance 4"/></td></tr>\
+                                                    <tr><td>16.0</td><td><input type="text" id="coarse allowance 5" name="coarse allowance 5"/></td></tr>\
+                                                    <tr><td>9.50</td><td><input type="text" id="coarse allowance 6" name="coarse allowance 6"/></td></tr>\
+                                                    <tr><td>4.75</td><td><input type="text" id="coarse allowance 7" name="coarse allowance 7"/></td></tr>\
+                                                    <tr><td>2.36</td><td><input type="text" id="coarse allowance 8" name="coarse allowance 8"/></td></tr>\
+                                                    <tr><td>筛底</td><td><input type="text" id="coarse allowance 9" name="coarse allowance 9"/></td></tr>\
+                                                </table>\
+                                            </div>\
+                                            <div class="modal-footer">\
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">完成</button>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            </fieldset>\
+                        </div>\
+                    </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td></td>\
+                <td>\
+                    <div class="formControls skin-minimal">\
+                        <div class="form-inline" style="float:left"><input type="checkbox" id="check_cu2" name="粗集料2" value="粗集料2" onclick="checkBox_cu2();" /><label for="粗集料2">粗集料2</label>\
+                            <fieldset id="cu2" disabled="disabled" class="form-group">\
+                            <select class="form-control input-sm" id="Coarse aggregate variety 2" style="width:110px;" name="Coarse aggregate variety 2">\
+                                <option value="null"><span style="color:red">*</span>请选择品种</option>\
+                                <option value="山碎石">山碎石</option>\
+                                <option value="卵碎石">卵碎石</option>\
+                                <option value="卵石">卵石</option></select>\
+                            <select onclick="cuModel_2();" class="form-control input-sm" id="Coarse aggregate model 2" style="width:110px;" name="Coarse aggregate model 2">\
+                                <option value="null"><span style="color:red">*</span>请选择型号</option>\
+                                <option value="5-10">5-10(mm)</option>\
+                                <option value="10-20">10-20(mm)</option>\
+                                <option value="手动">手动输入</option>\
+                            </select>\
+                            <fieldset id="粗型号2" class="form-group" disabled="disabled">\
+                                <span>型号添加</span>\
+                                <input type="text" style="width:55px" class="form-control input-sm" name="lower model 2" id="lower model 2" placeholder=""/>\
+                                <span>-</span>\
+                                <input type="text" style="width:55px" class="form-control input-sm" name="upper model 2" id="upper model 2" placeholder=""/>\
+                            </fieldset>\
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Coarsegradation2">级配数据</button>\
+                            <div class="modal fade" id="Coarsegradation2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
+                                <div class="modal-dialog" style="z-index:1051;width:350px;">\
+                                    <div class="modal-content">\
+                                        <div class="modal-header">\
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
+                                            <h3 class="modal-title" id="myModalLabel">石的筛分</h3>\
+                                            <div class="modal-body">\
+                                                <table class="table table-bordered">\
+                                                    <tr><td>筛孔尺寸(mm)</td><td>筛余量(g)</td></tr>\
+                                                    <tr><td>37.5</td><td><input type="text" id="coarse sieve 1" name="coarse sieve 1"/></td></tr>\
+                                                    <tr><td>31.5</td><td><input type="text" id="coarse sieve 2" name="coarse sieve 2"/></td></tr>\
+                                                    <tr><td>26.5</td><td><input type="text" id="coarse sieve 3" name="coarse sieve 3"/></td></tr>\
+                                                    <tr><td>19.0</td><td><input type="text" id="coarse sieve 4" name="coarse sieve 4"/></td></tr>\
+                                                    <tr><td>16.0</td><td><input type="text" id="coarse sieve 5" name="coarse sieve 5"/></td></tr>\
+                                                    <tr><td>9.50</td><td><input type="text" id="coarse sieve 6" name="coarse sieve 6"/></td></tr>\
+                                                    <tr><td>4.75</td><td><input type="text" id="coarse sieve 7" name="coarse sieve 7"/></td></tr>\
+                                                    <tr><td>2.36</td><td><input type="text" id="coarse sieve 8" name="coarse sieve 8"/></td></tr>\
+                                                    <tr><td>筛底</td><td><input type="text" id="coarse sieve 9" name="coarse sieve 9"/></td></tr>\
+                                                </table>\
+                                            </div>\
+                                            <div class="modal-footer">\
+                                                <button type="button" class="btn btn-primary" data-dismiss="modal">完成</button>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                            </fieldset>\
+                        </div>\
+                    </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td><span class="checkbox-inline" style="font-size:15px">减水剂：</span></td>\
+                <td>\
+                    <div class="formControls">\
+                        <filedset calss="form-group">\
+                            <div class="col-xs-2" style="display: inline-block;width: 150px;">\
+                                <select class="form-control input-sm" id="减水剂品种等级" style="width:135px;" name="减水剂品种等级">\
+                                    <option value="null"><span style="color:red">*</span>请选择品种等级</option>\
+                                    <option value="聚羧酸高性能减水剂-缓凝型">聚羧酸高性能减水剂-缓凝型</option>\
+                                    <option value="聚羧酸高性能减水剂-标准型">聚羧酸高性能减水剂-标准型</option>\
+                                </select>\
+                            </div>\
+                            <div class="col-xs-2 form-inline" style="display: inline-block;width: 150px;">\
+                                <span for="jianshuiji"><span style="color:red">*</span>推荐掺量(%)</span>\
+                                <input type="text" style="width:40px" class="form-control input-sm" placeholder="" id="shenliang" name="推荐渗量"/>\
+                            </div>\
+                            <div class="col-xs-2 form-inline" style="display: inline-block;width: 130px;">\
+                                <span for="jianshuiji">减水率(%)</span>\
+                                <input type="text" style="width:40px" class="form-control input-sm" placeholder="" id="jianshuilv" name="减水率"/>\
+                            </div>\
+                            <div class="col-xs-2 form-inline" style="display: inline-block;width: 130px;">\
+                                <span for="jianshuiji">含气量(%)</span>\
+                                <input type="text" style="width:40px" class="form-control input-sm" placeholder="" id="hanqiliang" name="含气量"/>\
+                            </div>\
+                            <div class="col-xs-2 form-inline" style="display: inline-block;width: 175px;">\
+                            <span for="jianshuiji">抗压强度比28d(%)</span>\
+                            <input type="text" style="width:40px" class="form-control input-sm" placeholder="" id="compressivestrength" name="抗压强度比28d"/>\
+                            </div>\
+                            <div class="col-xs-2 form-inline" style="display: inline-block;width: 145px;">\
+                            <span for="jianshuiji">泌水率比(%)</span>\
+                            <input type="text" style="width:40px" class="form-control input-sm" placeholder="" id="waterratio" name="泌水率比"/>\
+                            </div>\
+                        </filedset>\
+                    </div>\
+                </td>\
+            </tr>\
+            <tr>\
+                <td>\
+                <button type="button" class="btn btn-primary" id="other material" name="other material" onclick="addOth()">+其它材料</button>\
+                </td>\
+                <td>\
+                <filedset class="form-group">\
+                    <div class="col-xs-2 form-inline">\
+                        <button type="button" class="btn btn-primary" id="fine aggregate" name="fine aggregate" onclick="addXi()">\
+                        +细集料\
+                        </button>\
+                    </div>\
+                    <div class="col-xs-2 form-inline">\
+                        <button type="button" class="btn btn-primary" id="coarse aggregate" name="coarse aggregate" onclick="addCu()">\
+                        +粗集料\
+                        </button>\
+                    </div>\
+                    <div class="col-xs-2 form-inline">\
+                        <button type="button" class="btn btn-primary" id="flyash" name="flyash" onclick="addFen()">+粉煤灰\
+                        </button>\
+                    </div>\
+                    <div class="col-xs-2 form-inline">\
+                        <button type="button" class="btn btn-primary" id="slagash" name="slagash" onclick="addKuang()">\
+                            +矿渣粉\
+                        </button>\
+                    </div>\
+                    <div class="col-xs-2 form-inline">\
+                        <button type="button" class="btn btn-primary" id="limestone" name="limestone" onclick="addShi()">\
+                            +石灰石粉\
+                        </button>\
+                    </div>\
+                    <div class="col-xs-2 form-inline">\
+                        <button type="button" class="btn btn-primary" id="expansiveagent" name="expansiveagent" onclick="addPeng()">+膨胀剂\
+                        </button>\
+                    </div>\
+                </filedset>\
+                </td>\
+            </tr>\
+        </table>\
+        <table class="table table-bordered" id="Price">\
+            <tr>\
+                <td style="width: 70px;">材料</td>\
+                <td>水泥</td>\
+                <td>细集料1</td>\
+                <td>细集料2</td>\
+                <td>细集料3</td>\
+                <td>粗集料1</td>\
+                <td>粗集料2</td>\
+                <td>粗集料3</td>\
+                <td>水</td>\
+                <td>减水剂</td>\
+                <td>粉煤灰</td>\
+                <td>矿渣粉</td>\
+                <td>石灰石粉</td>\
+                <td>膨胀剂</td>\
+                <td>其它材料</td>\
+            </tr>\
+            <tr>\
+                <td style="width: 70px;">价格(元/吨)</td>\
+                <td><input type="text" class="form-control input-sm" name="水泥价格" id="cement price" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" name="Fine aggregate price 1" id="Fine aggregate price 1" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" name="Fine aggregate price 2" id="Fine aggregate price 2" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" name="Fine aggregate price 3" id="Fine aggregate price 3" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" name="Coarse aggregate price 1" id="Coarse aggregate price 1" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" name="Coarse aggregate price 2" id="Coarse aggregate price 2" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" name="Coarse aggregate price 3" id="Coarse aggregate price 3" disabled="disabled" placeholder="" /></td>\
+                <td><input type="text" class="form-control input-sm" name="水价格" id="水价格" placeholder=""/></td>\
+                <td><input type="text" class="form-control input-sm" id="减水剂价格" name="减水剂价格" placeholder=""/></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" id="Price of fly ash" name="Price of fly ash" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" id="Slag powder price" name="Slag powder price" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" id="limestone price" name="limestone price" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" id="Expander price" name="Expander price" disabled="disabled" placeholder="" /></td>\
+                <td><input style="background-color: #7e8795;" value="空" type="text" class="form-control input-sm" id="other material price" name="other material price" disabled="disabled" placeholder="" /></td>\
+            </tr>\
+                </table><div class="modal-footer">\
+                <button type="submit" class="btn btn-primary" onclick="return check_form();">提交</button>\
+                </div>\
+                </form>';
+
+                //console.log(data.scoring_rules);
+
+                //  var index1=layer.open({
+                //      type: 1,
+                //     area: ['100%', '100%'],
+                //     fix: false, //不固定
+                //   anim: -1,
+                //   title: title,
+                //   content: html,
+                //   end: function () {
+                //窗口关闭后，会执行这里的代写,刷新代码写就可以了
+                //window.location.reload();
+                //   }
+                //});
+                rules = data.constraint_rules;
+                //layer.full(index1);
+                //layer.iframeAuto(index1);
+                //console.log(data.constraint_rules);
+                document.body.innerHTML = html;
+
+            },
+            error: function (result) {
+                alert(result);
+            },
+        });
+
+    }
+
+    function tanYe() {
+        layer_show('new', '/design/list', '800', '600');
+    }
+
+    /*用户-查看*/
+    function member_show(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    function check_form() {
+        //document.getElementById("抗渗s").disabled = false;  //解除抗渗等级、限制膨胀率的禁选
+        console.log(rules);
+        for (var in_r in rules) {
+            var item = rules[in_r];
+            if (item['constraineditemvalue'] == null) {
+                console.log(item);
+            }
+            /*<![CDATA[*/
+            if (item['dependency'] != null && item['dependencyvalue'] != null && item['constraineditemvalue'] != null || item['dependency'] != "" && item['dependencyvalue'] != "" && item['constraineditemvalue'] != "") {
+                var gangxian = document.getElementById("checkbox10");
+                var jubingxi = document.getElementById("checkbox11");
+                if (item['dependency'] == '混凝土品种' && item['constraineditem'] == '材料要求') {
+                    //alert("problem");
+                    if (item['dependencyvalue'] == '钢纤维混凝土' && gangxian.checked) {
+                        //alert("钢纤维problem");
+                        var obj = document.getElementsByName(item['constraineditemvalue']);
+                        var str = obj.value.val.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+
+                        if (str == '' || str == undefined || str == null) {
+                            alert(item['constraineditemvalue'] + '不能为空！');
+                            return false;
+                        }
+                    }
+                    if (item['dependencyvalue'] == '聚丙烯纤维混凝土' && jubingxi.checked) {
+                        var obj = document.getElementsByName(item['constraineditemvalue']);
+                        var str = obj.value.val.replace(/(^\s*)|(\s*$)/g, '');//去除空格;
+
+                        if (str == '' || str == undefined || str == null) {
+                            alert(item['constraineditemvalue'] + '不能为空！');
+                            return false;
+                        }
+                    }
+                }
+            }
+            if (item['dependency'] != null && item['dependencyvalue'] != null && item['constraineditemvalue'] == null || item['dependency'] != "" && item['dependencyvalue'] != "" && item['constraineditemvalue'] == "") {
+
+                var kansheng = document.getElementById("checkbox2");
+                var buchang = document.getElementById("checkbox4");
+                if (item['dependencyvalue'] == '抗渗等级混凝土' && kansheng.checked) {
+
+                    var obj = document.getElementById("抗渗s");
+                    // var count = obj.options.length;
+                    // var j = 0;
+                    // for (var i = 0; count > i; i++) {
+                    //     if (obj[i].checked) {
+                    //         j++;
+                    //     }
+                    // }
+                    if (obj.value == "" || obj.value == "null") {
+                        //alert(item);
+                        alert(item['constraineditem'] + '不能为空！');
+                        return false;
+                    }
+                }
+                if (item['dependencyvalue'] == '补偿收缩混凝土' && buchang.checked) {
+                    var obj = document.getElementById("限制膨胀率s");
+                    // var count = obj.options.length;
+                    // var j = 0;
+                    // for (var i = 0; count > i; i++) {
+                    //     if (obj[i].checked) {
+                    //         j++;
+                    //     }
+                    // }
+                    if (obj.value == "" || obj.value == "null") {
+                        alert(item['constraineditem'] + '不能为空！');
+                        return false;
+                    }
+                }
+
+            }
+            if (item['dependency'] == null && item['dependencyvalue'] == null && item['constraineditemvalue'] == null || item['dependency'] == "" && item['dependencyvalue'] == "" && item['constraineditemvalue'] == "") {
+                console.log(item);
+                if (item['constraineditem'] == '混凝土品种') {
+                    var obj = document.getElementsByName(item['constraineditem']);
+                    var count = obj.length;
+                    var j = 0;
+                    console.log(count);
+                    for (var i = 0; count > i; i++) {
+                        if (obj[i].checked) {
+                            j++;
+                        }
+                    }
+                    if (j == 0) {
+                        alert(item['constraineditem'] + '不能为空！');
+                        return false;
+                    }
+                }
+            }
+            /*]]>*/
+        }
+        return true;
+    }
+
+    /*用户-停用*/
+    function member_stop(obj, id) {
+        layer.confirm('确认要停用吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '',
+                dataType: 'json',
+                success: function (data) {
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_start(this,id)" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+                    $(obj).remove();
+                    layer.msg('已停用!', {icon: 5, time: 1000});
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    /*用户-启用*/
+    function member_start(obj, id) {
+        layer.confirm('确认要启用吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '',
+                dataType: 'json',
+                success: function (data) {
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_stop(this,id)" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+                    $(obj).remove();
+                    layer.msg('已启用!', {icon: 6, time: 1000});
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    /*用户-编辑*/
+    function member_edit(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*密码-修改*/
+    function change_password(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*用户-删除*/
+    function member_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '',
+                dataType: 'json',
+                success: function (data) {
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!', {icon: 1, time: 1000});
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    function qita_deleteRow(r) {
+        var i = r.parentNode.parentNode.parentNode.rowIndex;  //通过父节点，层层递进找到tr的索引号
+        var oth = document.getElementById("other material price");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_other -= 1;
+        oth.disabled = true;
+        oth.value = '空';
+        oth.style.backgroundColor = '#7e8795';
+    }
+
+    function xi_deleteRow(r) {   //细集料3 删除
+        var i = r.parentNode.parentNode.parentNode.parentNode.rowIndex;
+        var xi = document.getElementById("Fine aggregate price 3");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_xi -= 1;
+        xi.disabled = true;
+        xi.value = '空';
+        xi.style.backgroundColor = '#7e8795';
+    }
+
+    function cu_deleteRow(r) {  //粗集料3 删除
+        var i = r.parentNode.parentNode.parentNode.parentNode.rowIndex;
+        var cu = document.getElementById("Coarse aggregate price 3");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_cu -= 1;
+        cu.disabled = true;
+        cu.value = '空';
+        cu.style.backgroundColor = '#7e8795';
+    }
+
+    function fen_deleteRow(r) {
+        var i = r.parentNode.parentNode.parentNode.rowIndex;
+        var fen = document.getElementById("Price of fly ash");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_fen -= 1;
+        fen.disabled = true;
+        fen.value = '空';
+        fen.style.backgroundColor = '#7e8795';
+    }
+
+    function kuang_deleteRow(r) {
+        var i = r.parentNode.parentNode.parentNode.rowIndex;
+        var kuang = document.getElementById("Slag powder price");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_kuang -= 1;
+        kuang.disabled = true;
+        kuang.value = '空';
+        kuang.style.backgroundColor = '#7e8795';
+    }
+
+    function shi_deleteRow(r) {
+        var i = r.parentNode.parentNode.parentNode.rowIndex;
+        var shi = document.getElementById("limestone price");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_shi -= 1;
+        shi.disabled = true;
+        shi.value = '空';
+        shi.style.backgroundColor = '#7e8795';
+    }
+
+    function peng_deleteRow(r) {
+        var i = r.parentNode.parentNode.parentNode.rowIndex;
+        var peng = document.getElementById("Expander price");
+        document.getElementById('selectedCondition').deleteRow(i);
+        i_peng -= 1;
+        peng.disabled = true;
+        peng.value = '空';
+        peng.style.backgroundColor = '#7e8795';
+    }
+
+    var i_other = 0;
+    var i_xi = 0;
+    var i_cu = 0;
+    var i_fen = 0;
+    var i_kuang = 0;
+    var i_shi = 0;
+    var i_peng = 0;
+
+    function addOth() {
+        if (1 > i_other) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">其它材料：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="form-inline"><div class="form-group" style="margin-left:20px;"><span>材料名称</span><input type="text" style="width: 100px;" class="form-control input-sm" id="otherName' + (i_other) + '" name="otherName' + (i_other) + '" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>型号</span><input type="text" style="width:100px" class="form-control input-sm" id="otherModel' + (i_other) + '" name="otherModel' + (i_other) + '" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>用量(kg)</span><input type="text" style="width:50px" class="form-control input-sm" id="otherUse' + (i_other) + '" name="otherUse' + (i_other) + '" placeholder="" /></div><i class="Hui-iconfont" style="font-size: 20px;" onclick="qita_deleteRow(this);">&#xe609;</i></div>';
+
+            i_other += 1;
+
+            var i = document.getElementById("other material price");
+            i.disabled = false;
+            i.value = '';
+            i.style.backgroundColor = '#ffffff';
+            // document.getElementById("other material").innerHTML = "删除材料";
+            // document.getElementById("other material").classList = "btn btn-secondary";
+        }
+        // else{
+        //     var newtb = document.getElementById("selectedCondition");
+        //
+        //     newtb.deleteRow(12+i_xi+i_cu+i_fen+i_kuang+i_shi+i_peng+i_other);
+        //
+        //     i_other -= 1;
+        //     document.getElementById("other material").innerHTML = "+增加其它材料";
+        //     document.getElementById("other material").classList = "btn btn-primary";
+        // }
+    }
+
+    function addXi() {
+        if (1 > i_xi) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">细集料：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="formControls skin-minimal"><div class="form-inline"><input type="checkbox" id="check_xi3" name="细集料3" value="细集料3" onclick="checkBox_xi3();"/><label for="细集料3">细集料3</label><fieldset id="xi3" disabled="disabled" class="form-group"><select class="form-control input-sm" id="Fine aggregate variety 3" style="width:110px;margin-left:10px;" name="Fine aggregate variety 3"><option value="null"><span style="color:red">*</span>请选择品种</option><option value="机制砂">机制砂</option><option value="天然砂">天然砂</option></select><select class="form-control input-sm" id="Fine aggregate model 3" style="width:110px;margin-left:10px;" name="Fine aggregate model 3"><option value="null"><span style="color:red">*</span>请选择型号</option><option value="粗砂">粗砂</option><option value="中砂">中砂</option><option value="细砂">细砂</option><option value="特细砂">特细砂</option></select><span style="margin-left:10px;">细度模数:</span><input type="text" style="width:55px;" class="form-control input-sm" name="Fineness modulus 3" id="Fineness modulus 3" placeholder=""/></fieldset><i class="Hui-iconfont" style="font-size:20px;" onclick="xi_deleteRow(this);">&#xe609;</i></div></div>';
+
+            i_xi += 1;
+        }
+    }
+
+    function addCu() {
+        if (1 > i_cu) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">粗集料：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="formControls skin-minimal"><div class="form-inline"><input type="checkbox" id="check_cu3" name="粗集料3" value="粗集料3" onclick="checkBox_cu3();"/><label for="粗集料3">粗集料3</label><fieldset id="cu3" disabled="disabled" class="form-group"><select class="form-control input-sm" id="Coarse aggregate variety 3" style="width:110px;margin-left:10px;" name="Coarse aggregate variety 3"><option value="null"><span style="color:red">*</span>请选择品种</option><option value="山碎石">山碎石</option><option value="卵碎石">卵碎石</option><option value="卵石">卵石</option></select><select onclick="cuModel_3();" class="form-control input-sm" id="Coarse aggregate model 3" style="width:110px;margin-left:10px;" name="Coarse aggregate model 3"><option value="null"><span style="color:red">*</span>请选择型号</option><option value="5-10">5-10(mm)</option><option value="10-20">10-20(mm)</option><option value="手动">手动输入</option></select><fieldset id="粗型号3" class="form-group" disabled="disabled"><span style="margin-left:10px;">型号添加</span><input type="text" style="width:55px" class="form-control input-sm" name="lower model 3" id="lower model 3" placeholder=""/><span>-</span><input type="text" style="width:55px" class="form-control input-sm" name="upper model 3" id="upper model 3" placeholder=""/></fieldset></fieldset><i class="Hui-iconfont" style="font-size: 20px;" onclick="cu_deleteRow(this);">&#xe609;</i></div></div>';
+
+            i_cu += 1;
+        }
+    }
+
+    function addFen() {
+        if (1 > i_fen) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">粉煤灰：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="form-inline"><div class="form-group" style="margin-left:20px;"><select class="form-control input-sm" style="width:50px" id="Category of fly ash' + (i_fen) + '" name="Category of fly ash' + (i_fen) + '"><option value="null"><span style="color:red">*</span>请选择类别</option><option selected="selected" value="F类">F</option><option value="C类">C</option></select></div><div class="form-group" style="margin-left:20px;width: 135px;"><select class="form-control input-sm" id="Grade of fly ash variety' + (i_fen) + '" name="Grade of fly ash variety' + (i_fen) + '"><option value="null"><span style="color:red">*</span>请选择品种等级</option><option value="Ⅰ级">Ⅰ级</option><option value="Ⅱ级">Ⅱ级</option><option value="Ⅲ级">Ⅲ级</option><option>等级外</option></select></div><div class="form-group" style="margin-left:20px;"><span>细度(%)</span><input name="Fineness of fly ash' + (i_fen) + '" id="Fineness of fly ash' + (i_fen) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>需水量比(%)</span><input id="Water demand ratio' + (i_fen) + '" name="Water demand ratio' + (i_fen) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>烧失量(%)</span><input id="Loss of burning' + (i_fen) + '" name="Loss of burning' + (i_fen) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>28d活性指数(%)</span><input id="Activity index of fly ash' + (i_fen) + '" name="Activity index of fly ash' + (i_fen) + '" type="text" style="width:40px;" class="form-control input-sm" placeholder="" /></div><i class="Hui-iconfont" style="font-size: 20px;" onclick="fen_deleteRow(this);">&#xe609;</i></div>';
+
+            i_fen += 1;
+
+            var i = document.getElementById("Price of fly ash");
+            i.disabled = false;
+            i.value = '';
+            i.style.backgroundColor = '#ffffff';
+        }
+    }
+
+    function addKuang() {
+        if (1 > i_kuang) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">矿渣粉：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="form-inline"><div class="form-group" style="margin-left:20px;"><select style="width: 135px;" class="form-control input-sm" id="Grade of slag powder' + (i_kuang) + '" name="Grade of slag powder' + (i_kuang) + '"><option value="null"><span style="color:red">*</span>请选择品种等级</option><option value="S105">S105</option><option value="S95">S95</option><option value="S75">S75</option></select></div><div class="form-group" style="margin-left:20px;"><span>28d活性指数(%)</span><input id="Activity index of slag' + (i_kuang) + '" name="Activity index of slag' + (i_kuang) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><select style="width: 135px;" class="form-control input-sm" id="Slag powder manufacturers' + (i_kuang) + '" name="Slag powder manufacturers' + (i_kuang) + '"><option value="null">请选择生产厂家</option><option value="重庆祥众新型建材有限公司">重庆祥众新型建材有限公司</option></select></div><i class="Hui-iconfont" style="font-size: 20px;" onclick="kuang_deleteRow(this);">&#xe609;</i></div>';
+
+            i_kuang += 1;
+
+            var i = document.getElementById("Slag powder price");
+            i.disabled = false;
+            i.value = '';
+            i.style.backgroundColor = '#ffffff';
+        }
+    }
+
+    function addShi() {
+        if (1 > i_shi) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">石灰石粉：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="form-inline"><div class="form-group" style="margin-left:20px;"><span>细度(%)</span><input id="Limestone fineness' + (i_shi) + '" name="Limestone fineness' + (i_shi) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>亚甲蓝值(g/kg)</span><input id="Methylene blue value' + (i_shi) + '" name="Methylene blue value' + (i_shi) + '" type="text" style="width:50px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>28d活性指数(%)</span><input id="Limestone activity index' + (i_shi) + '" name="Limestone activity index' + (i_shi) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><i class="Hui-iconfont" style="font-size: 20px;" onclick="shi_deleteRow(this);">&#xe609;</i></div>';
+
+            i_shi += 1;
+
+            var i = document.getElementById("limestone price");
+            i.disabled = false;
+            i.value = '';
+            i.style.backgroundColor = '#ffffff';
+        }
+    }
+
+    function addPeng() {
+        if (1 > i_peng) {
+            var tb = document.getElementById("selectedCondition");
+
+            var newTr = tb.insertRow(15);//表示在第二行后添加一行
+
+            var newTd = newTr.insertCell();//表示在添加的行上添加第一格
+
+            newTd.innerHTML = '<span class="checkbox-inline" style="font-size:15px">膨胀剂：</span>';
+
+            var newTd2 = newTr.insertCell();//表示在添加的行上添加第二格
+
+            newTd2.innerHTML = '<div class="form-inline"><div class="form-group" style="margin-left:20px;"><select style="width: 135px;" class="form-control input-sm" id="Type of expander' + (i_peng) + '" name="Type of expander' + (i_peng) + '"><option value="null"><span style="color:red">*</span>请选择品种型号</option><option value="Ⅰ型硫铝酸钙类">Ⅰ型硫铝酸钙类</option><option value="Ⅱ型氧化钙类">Ⅱ型氧化钙类</option><option value="Ⅱ型硫铝酸钙-氧化钙类">Ⅱ型硫铝酸钙-氧化钙类</option></select></div><div class="form-group" style="margin-left:20px;"><span>28d抗压强度(MPa)</span><input id="Expansion agent strength' + (i_peng) + '" name="Expansion agent strength' + (i_peng) + '" type="text" style="width:50px" class="form-control input-sm" placeholder="" /></div><div class="form-group" style="margin-left:20px;"><span>限制膨胀率(%)</span><input id="Limiting expansion rate' + (i_peng) + '" name="Limiting expansion rate' + (i_peng) + '" type="text" style="width:40px" class="form-control input-sm" placeholder="" /></div><i class="Hui-iconfont" style="font-size: 20px;" onclick="peng_deleteRow(this);">&#xe609;</i></div>';
+
+            i_peng += 1;
+
+            var i = document.getElementById("Expander price");
+            i.disabled = false;
+            i.value = '';
+            i.style.backgroundColor = '#ffffff';
+        }
+    }
+
+    function check_box() {                                     //设置混凝土为必选项
+        var obj = document.getElementsByName("混凝土品种");
+        var count = obj.length;
+        var j = 0;
+        for (var i = 0; count > i; i++) {
+            if (obj[i].checked) {
+                j++;
+            }
+        }
+        if (j == 0) {
+            alert("混凝土品种至少选择一个");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // function radio_box() {                                     //设置强度等级为必选项
+    //     var obj = document.getElementsByName("强度");
+    //     var count = obj.length;
+    //     var j = 0;
+    //     for (var i = 0; count > i; i += 1) {
+    //         if (obj[i].checked) {
+    //             j++;
+    //         }
+    //     }
+    //     if (j == 0) {
+    //         alert("强度等级不能为空");
+    //         return false;
+    //     } else {
+    //         return true;
+    //     }
+    // }
+
+    function impervious() {                              //混凝土品种选择抗渗后，抗渗等级变为必选项
+        var tar = document.getElementById("checkbox2");
+        if (tar.checked) {
+            var obj = document.getElementsByName("抗渗");
+            var count = obj.length;
+            var j = 0;
+            for (var i = 0; count > i; i += 1) {
+                if (obj[i].checked) {
+                    j++;
+                }
+            }
+            if (j == 0) {
+                alert("抗渗等级不能为空");
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            var a = document.getElementsByName("抗渗");
+            var count = a.length;
+            for (var i = 0; count > i; i += 1) {
+                a[i].disabled = "disabled";
+            }
+        }
+    }
+
+    // function slump_box() {                                   //设置坍落度为必选项
+    //     var obj = document.getElementsByName("坍落度");
+    //     var count = obj.length;
+    //     var j = 0;
+    //     for (var i = 0; count > i; i += 1) {
+    //         if (obj[i].checked) {
+    //             j++;
+    //         }
+    //     }
+    //     if (j == 0) {
+    //         alert("坍落度不能为空");
+    //         return false;
+    //     } else {
+    //         return true;
+    //     }
+    // }
+
+    // function divergence_box() {                                   //设置扩展度为必选项
+    //     var obj = document.getElementsByName("扩展度");
+    //     var count = obj.length;
+    //     var j = 0;
+    //     for (var i = 0; count > i; i += 1) {
+    //         if (obj[i].checked) {
+    //             j++;
+    //         }
+    //     }
+    //     if (j == 0) {
+    //         alert("扩展度不能为空");
+    //         return false;
+    //     } else {
+    //         return true;
+    //     }
+    // }
+
+    function shrinkage() {                              //混凝土品种选择补偿收缩后，限制膨胀率变为必选项
+        var tar = document.getElementById("checkbox4");
+        if (tar.checked) {
+            var obj = document.getElementsByName("限制膨胀率");
+            var count = obj.length;
+            var j = 0;
+            for (var i = 0; count > i; i += 1) {
+                if (obj[i].checked) {
+                    j++;
+                }
+            }
+            if (j == 0) {
+                alert("限制膨胀率不能为空");
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            var a = document.getElementsByName("限制膨胀率");
+            var count = a.length;
+            for (var i = 0; count > i; i += 1) {
+                a[i].disabled = "disabled";
+            }
+        }
+    }
+
+    function steel_fibre() {                              //混凝土品种选择钢纤维后，钢纤维掺量变为必填项
+        var tar = document.getElementById("checkbox10");
+        if (tar.checked) {
+            var obj = document.getElementById("checkbox19");
+            if (obj.checked) {
+                return true;
+            } else {
+                alert("钢纤维掺量不能为空");
+                return false;
+            }
+        } else {
+            var a = document.getElementById("checkbox19");
+            a.disabled = "disabled";
+        }
+    }
+
+    function poly_propylene() {                              //混凝土品种选择聚丙烯纤维后，聚丙烯纤维掺量变为必填项
+        var tar = document.getElementById("checkbox11");
+        if (tar.checked) {
+            var obj = document.getElementById("checkbox21");
+            if (obj.checked) {
+                return true;
+            } else {
+                alert("聚丙烯纤维掺量不能为空");
+                return false;
+            }
+        } else {
+            var a = document.getElementById("checkbox21");
+            a.disabled = "disabled";
+        }
+    }
+
+    function waters_unit() {                 //水价格转换为吨计算
+        var choose = document.getElementById("水价格单位");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("水价格");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function cement_unit() {                 //水泥价格转换为吨计算
+        var choose = document.getElementById("cement unit");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("cement price");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function fine1_unit() {                 //细集料1价格转换为吨计算
+        var choose = document.getElementById("Fine aggregate unit");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Fine aggregate price");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function fine2_unit() {                 //细集料2价格转换为吨计算
+        var choose = document.getElementById("Fine aggregate unit0");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Fine aggregate price0");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function fine3_unit() {                 //细集料3价格转换为吨计算
+        var choose = document.getElementById("Fine aggregate unit1");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Fine aggregate price1");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function coarse1_unit() {                 //粗集料1价格转换为吨计算
+        var choose = document.getElementById("Coarse aggregate unit0");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Coarse aggregate price0");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function coarse2_unit() {                 //粗集料2价格转换为吨计算
+        var choose = document.getElementById("Coarse aggregate unit1");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Coarse aggregate price1");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function coarse3_unit() {                 //粗集料3价格转换为吨计算
+        var choose = document.getElementById("Coarse aggregate unit2");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Coarse aggregate price2");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function water_unit() {                 //减水剂价格转换为吨计算
+        var choose = document.getElementById("Water reducing unit");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("减水剂价格");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function ash_unit() {                 //粉煤灰价格转换为吨计算
+        var choose = document.getElementById("unit of fly ash0");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Price of fly ash0");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function powder_unit() {                 //矿渣粉价格转换为吨计算
+        var choose = document.getElementById("Slag powder unit0");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Slag powder price0");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function limestone_unit() {                 //石灰石粉价格转换为吨计算
+        var choose = document.getElementById("limestone unit0");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("limestone0");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function expander_unit() {                 //膨胀剂价格转换为吨计算
+        var choose = document.getElementById("Expander unit0");
+        var index = choose.selectedIndex;
+        if (choose.options[index].text == "千克") {
+            var obj = document.getElementById("Expander price0");
+            var pri = obj.value;
+            pri /= 1000;
+            choose.options[index].text = "吨";
+        }
+    }
+
+    function required_box() {
+        check_box();
+        radio_box();
+        impervious();
+        slump_box();
+        divergence_box();
+        shrinkage();
+        steel_fibre();
+        poly_propylene();
+        waters_unit();
+        cement_unit();
+        fine1_unit();
+        fine2_unit();
+        fine3_unit();
+        coarse1_unit();
+        coarse2_unit();
+        coarse3_unit();
+        water_unit();
+        ash_unit();
+        powder_unit();
+        limestone_unit();
+        expander_unit();
+    }
+</script>
+<script>
+    $(".deleteBtn").click(function () {
+        //删除当前规则
+        $("#deleteDesignForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+</script>
+</body>
+</html>

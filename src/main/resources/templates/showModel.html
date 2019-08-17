@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+  <!--[if lt IE 9]>
+  <script type="text/javascript" src="/lib/html5shiv.js"></script>
+  <script type="text/javascript" src="/lib/respond.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" type="text/css" href="/css/H-ui.min.css" />
+  <link rel="stylesheet" type="text/css" href="/css/H-ui.admin.css" />
+  <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css" />
+  <link rel="stylesheet" type="text/css" href="/skin/default/skin.css" id="skin" />
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+  <script src="/js/jquery-3.3.1.min.js"></script>
+  <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+  <script src="/js/bootstrap.min.js"></script>
+
+  <!--[if IE 6]>
+  <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+  <script>DD_belatedPNG.fix('*');</script>
+  <![endif]-->
+</head>
+<body>
+<div class="page-container">
+<div><p class="f-20">混凝土配合比智能设计<small>条件筛选</small></p></div>
+
+<div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">通知信息</a></li>
+    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">信息提交</a></li>
+    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">条件筛选</a></li>
+    <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">结果展示</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active table-responsive" id="home">
+    <table class="table table-hover table-bordered ">
+    <!-- On rows -->
+
+<!-- On cells (`td` or `th`) -->
+<tr class="active">
+  <td >其二</td>
+  <td >飞过海</td>
+  <td >土语</td>
+  <td >千万人</td>
+  <td >刚回家</td>
+</tr>
+<tr class="success">
+  <td >其二</td>
+  <td >飞过海</td>
+  <td >土语</td>
+  <td >千万人</td>
+  <td >刚回家</td>
+</tr>
+<tr class="warning">
+  <td >其二</td>
+  <td >飞过海</td>
+  <td >土语</td>
+  <td >千万人</td>
+  <td >刚回家</td>
+</tr>
+</table></div>
+<div role="tabpanel" class="tab-pane" id="profile">
+<form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+</form>
+</div>
+    <div role="tabpanel" class="tab-pane" id="messages">
+<form >
+  <div class="form-group">
+<label class="checkbox-inline">时间段：</label>
+<label class="checkbox-inline">
+<select class="form-control">
+  <option>低温段12-2月</option>
+  <option>适温段3-4月</option>
+  <option>高温段5-9月</option>
+  <option>适温段10-11月</option>
+</select>
+</label>
+  </div>
+  <div class="form-group">
+  <label class="checkbox-inline">混凝土品种：</label>
+    <label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> 常规
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> 抗渗
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox3" value="option3"> 防水
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> 补偿收缩
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> 水下
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox3" value="option3"> 大体积
+</label>
+  </div>
+  
+  <div class="form-group">
+  <label class="radio-inline">强度等级：</label>
+    <label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> C15
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> C20
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> C25
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> C30
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> C35
+</label>
+<div></div>
+    </div>
+    <div class="form-group">
+  <label class="radio-inline">抗渗等级：</label>
+    <label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> P6
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> P8
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> P10
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> P12
+</label>
+
+    </div>
+    <div class="form-group">
+  <label class="checkbox-inline">材料要求：</label>
+    <label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> 细石
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> 低碱水泥
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox3" value="option3"> 膨胀型号GNA
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox1" value="option1"> 膨胀型号
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox2" value="option2"> 水下
+</label>
+<label class="checkbox-inline">
+  <input type="checkbox" id="inlineCheckbox3" value="option3"> 大体积
+</label>
+  </div>
+  <div class="form-group">
+  <label class="radio-inline">限制膨胀率：</label>
+    <label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 6%
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 8%
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 10%
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 12%
+</label>
+
+    </div>
+    <div class="form-group">
+  <label class="radio-inline">坍塌度mm：</label>
+    <label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 180±20
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 190±20
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 200±20
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 210±20
+</label>
+    </div>
+    <div class="form-group">
+  <label class="radio-inline">扩展度：</label>
+    <label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> ≥450
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> ≥500
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> ≥550
+</label>
+<label class="radio-inline">
+  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> ≥600
+</label>
+    </div>
+    <div class="form-group">
+  <label class="radio-inline">耐久性技术要求：</label>
+    <textarea class="form-control" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+  <label class="radio-inline">其他技术要求：</label>
+    <textarea class="form-control" rows="3"></textarea>
+    </div>
+  <div><button type="button" class="btn btn-primary btn-lg">提交</button></div>
+</form>
+</div>
+    <div role="tabpanel" class="tab-pane" id="settings">...</div>
+  </div>
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>智能设计</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 规则管理</nav>
+<div class="page-container">
+    <!--<div class="text-c"> 日期范围：
+        <input type="text" onfocus="WdatePicker({ maxDate:'#F{$dp.$D(\'datemax\')||\'%y-%M-%d\'}' })" id="datemin"
+               class="input-text Wdate" style="width:120px;"/>
+        -
+        <input type="text" onfocus="WdatePicker({ minDate:'#F{$dp.$D(\'datemin\')}',maxDate:'%y-%M-%d' })" id="datemax"
+               class="input-text Wdate" style="width:120px;"/>
+        <input type="text" class="input-text" style="width:250px" placeholder="输入条目名称" id="df" name=""/>
+        <button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜索
+        </button>
+    </div>
+    -->
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="l">
+        <a href="javascript:;" onclick="datadel()" th:attr="del_uri=@{/rule/delete/}"
+           class="btn btn-danger radius deleteBtnli">
+            <i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+        <a href="javascript:;" onclick="member_add('添加','/rule/add','','510')"
+           class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加规则</a></span> <span
+            class="r">共有数据：<strong th:text="${constraint_rules.size()}"></strong> 条</span></div>
+    <div class="mt-20">
+        <table class="table table-border table-bordered table-hover table-bg table-sort">
+            <thead>
+            <tr class="text-c">
+                <th width="25"><input type="checkbox" name="" value=""/></th>
+                <th>被约束项</th>
+                <th>被约束项值</th>
+                <th>依赖项</th>
+                <th>依赖项值</th>
+                <th>约束</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each="i:${constraint_rules}">
+                <td><input type="checkbox" th:value="${i.id}" name="test"/></td>
+                <td th:text="${i.constraineditem}"></td>
+                <td th:text="${i.constraineditemvalue}"></td>
+                <td th:text="${i.dependency}"></td>
+                <td th:text="${i.dependencyvalue}"></td>
+                <td th:text="${i.constraint}"></td>
+                <td class="td-manage">
+                    <a title="编辑"
+                       th:href="@{/rule/edit/}+${i.id}">
+                        <i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a title="删除"
+                       th:attr="del_uri=@{/rule/delete/}+${i.id}" class="deleteBtn">
+                        <i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <form id="deleteRuleForm" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+        </form>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.table-sort').dataTable({
+            "aaSorting": [[1, "desc"]],//默认第几个排序
+            "bStateSave": true,//状态保存
+            "aoColumnDefs": [
+                //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+                {"orderable": false, "aTargets": [0, 6]}// 制定列不参与排序
+            ]
+        });
+    });
+
+    /*规则-添加*/
+    function member_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+</script>
+<script>
+    $(".deleteBtn").click(function () {
+        //删除当前规则
+        $("#deleteRuleForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+
+    $(".deleteBtnli").click(function () {
+        obj = document.getElementsByName("test");
+        check_val = [];
+        for(k in obj){
+            if(obj[k].checked)
+                check_val.push(obj[k].value);
+        }
+        del_uri = $(this).attr("del_uri") + check_val;
+        //删除当前规则
+        $("#deleteRuleForm").attr("action", del_uri).submit();
+        return false;
+    });
+</script>
+</body>
+</html>

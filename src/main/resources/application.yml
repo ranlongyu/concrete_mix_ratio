@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.17.128:3306/big-data?useSSL=false
+    username: root
+    password: 123456rly
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+  resources:
+    static-locations: ["/templates/","/resources/","/static/"]
+  data:
+    mongodb:
+      uri: mongodb://root:root1@127.0.0.1:27017/big-data?authSource=admin&authMechanism=SCRAM-SHA-1
+#debug: true

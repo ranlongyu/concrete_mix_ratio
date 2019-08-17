@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <style type="text/css">
+        td {
+            white-space: nowrap;
+        }
+    </style>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+    <title>智能设计</title>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 评分管理</nav>
+<div class="page-container">
+    <div class="cl pd-5 bg-1 bk-gray mt-20"><span class="r">
+        <a href="javascript:;"
+           onclick="member_add('添加','/score/add','','510')"
+           class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加记录</a></span>
+    </div>
+    <div>
+        <table class="table table-condensed table-border table-bordered table-hover">
+            <thead>
+            <tr class="text-c">
+                <th class="c-blue">评分规则</th>
+                <th>材料要求</th>
+                <th>工作性能</th>
+                <th>强度检测数据</th>
+                <th>限制膨胀率(水中7d≥)</th>
+                <th>耐久性技术要求</th>
+                <th>水泥生产厂家</th>
+                <th>细集料品种、型号</th>
+                <th>粗集料品种、型号</th>
+                <th>水泥28d抗压强度</th>
+                <th>矿渣粉28d活性指数</th>
+                <th>粉煤灰细度、需水量比</th>
+                <th>膨胀剂限制膨胀率</th>
+                <th>减水剂减水率</th>
+                <th>石灰石粉细度</th>
+                <th>石灰石粉亚甲蓝值</th>
+                <th>粉煤灰烧失量</th>
+                <th>膨胀剂28d抗压强度</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-c" th:each="i,iter:${scoring_rules}">
+                <td th:text="${iter.index}+1"></td>
+                <td th:text="${i.materialrequirements}"></td>
+                <td th:text="${i.workperformance}"></td>
+                <td th:text="${i.intensitydd}"></td>
+                <td th:text="${i.limitexpansionrate}"></td>
+                <td th:text="${i.durabilitytr}"></td>
+                <td th:text="${i.cementmanufacturer}"></td>
+                <td th:text="${i.fineaggregate}"></td>
+                <td th:text="${i.coarseaggregate}"></td>
+                <td th:text="${i.cementcs28d}"></td>
+                <td th:text="${i.slagpowderi28d}"></td>
+                <td th:text="${i.flyash}"></td>
+                <td th:text="${i.expansionagent}"></td>
+                <td th:text="${i.waterreducer}"></td>
+                <td th:text="${i.limestonefineness}"></td>
+                <td th:text="${i.limestonepowdermbv}"></td>
+                <td th:text="${i.flyashloss}"></td>
+                <td th:text="${i.expansionagentcs28d}"></td>
+                <td class="td-manage">
+                    <a title="编辑"
+                       th:href="@{/score/edit/}+${i.id}">
+                        <i class="Hui-iconfont">&#xe6df;</i></a>
+                    <a title="删除"
+                       th:attr="del_uri=@{/score/delete/}+${i.id}" class="deleteBtn">
+                        <i class="Hui-iconfont">&#xe6e2;</i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <form id="deleteRuleForm" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+        </form>
+    </div>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+
+    /*用户-添加*/
+    function member_add(title, url, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*用户-查看*/
+    function member_show(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*用户-停用*/
+    function member_stop(obj, id) {
+        layer.confirm('确认要停用吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '',
+                dataType: 'json',
+                success: function (data) {
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_start(this,id)" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
+                    $(obj).remove();
+                    layer.msg('已停用!', {icon: 5, time: 1000});
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    /*用户-启用*/
+    function member_start(obj, id) {
+        layer.confirm('确认要启用吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '',
+                dataType: 'json',
+                success: function (data) {
+                    $(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="member_stop(this,id)" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
+                    $(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+                    $(obj).remove();
+                    layer.msg('已启用!', {icon: 6, time: 1000});
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    /*用户-编辑*/
+    function member_edit(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*密码-修改*/
+    function change_password(title, url, id, w, h) {
+        layer_show(title, url, w, h);
+    }
+
+    /*用户-删除*/
+    function member_del(obj, id) {
+        layer.confirm('确认要删除吗？', function (index) {
+            $.ajax({
+                type: 'POST',
+                url: '',
+                dataType: 'json',
+                success: function (data) {
+                    $(obj).parents("tr").remove();
+                    layer.msg('已删除!', {icon: 1, time: 1000});
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+</script>
+<script>
+    $(".deleteBtn").click(function () {
+        //删除当前规则
+        $("#deleteRuleForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+</script>
+</body>
+</html>

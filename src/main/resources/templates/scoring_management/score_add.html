@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+    <form th:action="@{/score/add}" method="post">
+
+        <input type="hidden" name="_method" value="put" th:if="${score!=null}"/>
+        <input type="hidden" name="id" th:if="${score!=null}" th:value="${score.id}"/>
+        <table class="table table-hover table-condensed table-bordered scoreAll" id="scoreAll">
+            <tr>
+                <td>材料要求</td>
+                <td>
+                    <input name="materialrequirements" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.materialrequirements}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>工作性能</td>
+                <td>
+                    <input name="workperformance" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.workperformance}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>强度检测数据</td>
+                <td>
+                    <input name="intensitydd" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.intensitydd}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>限制膨胀率</td>
+                <td>
+                    <input name="limitexpansionrate" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.limitexpansionrate}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>耐久性技术要求</td>
+                <td>
+                    <input name="durabilitytr" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.durabilitytr}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>水泥生产厂家</td>
+                <td>
+                    <input name="cementmanufacturer" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.cementmanufacturer}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>细集料品种、型号</td>
+                <td>
+                    <input name="fineaggregate" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.fineaggregate}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>粗集料品种、型号</td>
+                <td>
+                    <input name="coarseaggregate" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.coarseaggregate}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>水泥28d抗压强度</td>
+                <td>
+                    <input name="cementcs28d" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.cementcs28d}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>矿渣粉28d活性指数</td>
+                <td>
+                    <input name="slagpowderi28d" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.slagpowderi28d}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>粉煤灰细度、需水量比</td>
+                <td>
+                    <input name="flyash" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.flyash}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>膨胀剂限制膨胀率</td>
+                <td>
+                    <input name="expansionagent" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.expansionagent}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>减水剂减水率</td>
+                <td>
+                    <input name="waterreducer" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.waterreducer}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>石灰石粉细度</td>
+                <td>
+                    <input name="limestonefineness" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.limestonefineness}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>石灰石粉亚甲蓝值</td>
+                <td>
+                    <input name="limestonepowdermbv" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.limestonepowdermbv}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>粉煤灰烧失量</td>
+                <td>
+                    <input name="flyashloss" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.flyashloss}:0"/>
+                </td>
+            </tr>
+            <tr>
+                <td>膨胀剂28d抗压强度</td>
+                <td>
+                    <input name="expansionagentcs28d" type="text" class="form-control" placeholder=""
+                           th:value="${score!=null}?${score.expansionagentcs28d}:0"/>
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="btn btn-primary" th:text="${score!=null}?'修改':'添加'" onclick="return addScore()">
+            添加
+        </button>
+    </form>
+</main>
+
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+    /*评分总和判断*/
+    function addScore() {
+        var input = document.getElementById("scoreAll").getElementsByTagName("input");
+        var score = 0;
+        for (var i = 0; input.length > i; i++) {
+            var eachScore = input[i].value;
+            score += Number(eachScore);
+        }
+        if (score != 100) {
+            alert(score + "评分总和不等于100");
+            return false;
+        }
+    }
+</script>
+</body>
+</html>

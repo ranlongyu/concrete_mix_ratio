@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/lib/html5shiv.js"></script>
+    <script type="text/javascript" src="/lib/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/H-ui.admin.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/lib/Hui-iconfont/1.0.8/iconfont.css"/>
+    <link rel="stylesheet" type="text/css" href="/skin/default/skin.css" id="skin"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="/js/bootstrap.min.js"></script>
+
+    <!--[if IE 6]>
+    <script type="text/javascript" src="/lib/DD_belatedPNG_0.0.8a-min.js"></script>
+    <script>DD_belatedPNG.fix('*');</script>
+    <![endif]-->
+</head>
+<body>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<div class="page-container">
+
+    <!-- <div><p class="f-20">混凝土配合比智能设计</p></div> -->
+    <form>
+        <h4>目标混凝土</h4>
+        <table class="table table-hover table-condensed table-bordered" id="technical parameter">
+            <tr>
+                <th>混凝土品种</th>
+                <th>强度等级</th>
+                <th th:if="${design_record.impermerating != null}">抗渗等级</th>
+                <th th:if="${item_user.materialrequirements != null}">材料要求</th>
+                <th th:if="${item_user.limitexpansionrate1 != null}">限制膨胀率</th>
+                <th>坍落度mm</th>
+                <th>扩展度mm</th>
+                <th>耐久性技术要求</th>
+                <th>其他技术要求</th>
+            </tr>
+            <tr>
+                <td th:text="${design_record.concretevariety}"></td>
+                <td th:text="${design_record.powerlevel}"></td>
+                <td th:if="${design_record.impermerating != null}" th:text="${design_record.impermerating}"></td>
+                <td th:if="${item_user.materialrequirements != null}" th:text="${item_user.materialrequirements}"></td>
+                <td th:if="${item_user.limitexpansionrate1 != null}" th:text="${item_user.limitexpansionrate1}"></td>
+                <td th:text="${item_user.slump}"></td>
+                <td th:text="${item_user.expansion}"></td>
+                <td>无</td>
+                <td>无</td>
+            </tr>
+        </table>
+    </form>
+    <form>
+        <h4>原材料信息</h4>
+        <table class="table table-hover table-condensed table-bordered" id="Material information">
+            <tr>
+                <td style="width: 20%;">水泥</td>
+                <td colspan="2">
+                    <a th:if="${design_record.cementgrade != 'null'}"
+                       th:text="'品种等级：'+${design_record.cementgrade}" style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.cementcompress28d != 'null'} and ${design_record.cementcompress28d != null} and ${design_record.cementcompress28d != ''}"
+                       th:text="'28d抗压强度：'+${design_record.cementcompress28d}+'MPa'"
+                       style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.cementmanufacturer != 'null'}"
+                       th:text="'生产厂家：'+${design_record.cementmanufacturer}"></a>
+                </td>
+            </tr>
+            <tr th:if="${design_record.fineaggregate1variety != null} or ${design_record.fineaggregate1model != null} or ${design_record.fineaggregate1fm != null}">
+                <td style="width: 20%;">细集料</td>
+                <td style="width: 40%;">
+                    <a th:if="${design_record.fineaggregate1variety != 'null'}"
+                       th:text="'细集料1品种：'+${design_record.fineaggregate1variety}"
+                       style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.fineaggregate1model != 'null'}"
+                       th:text="'型号：'+${design_record.fineaggregate1model}"
+                       style="display: inline-block;width: 95px;"></a>
+                    <a th:if="${design_record.fineaggregate1fm != ''}"
+                       th:text="'细度模数：'+${design_record.fineaggregate1fm}"></a>
+                </td>
+                <td style="width: 40%;"
+                    th:if="${design_record.fineaggregate2variety != null} or ${design_record.fineaggregate2model != null} or ${design_record.fineaggregate2fm != null}">
+                    <a th:if="${design_record.fineaggregate2variety != 'null'}"
+                       th:text=" '细集料2品种：'+${design_record.fineaggregate2variety}"
+                       style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.fineaggregate2model != 'null'}"
+                       th:text="'型号：'+${design_record.fineaggregate2model}"
+                       style="display: inline-block;width: 95px;"></a>
+                    <a th:if="${design_record.fineaggregate2fm != ''}"
+                       th:text="'细度模数：'+${design_record.fineaggregate2fm}"></a>
+                </td>
+            </tr>
+            <tr th:if="${design_record.coarseaggregate1variety != null} or ${design_record.coarseaggregate1model != null}">
+                <td style="width: 20%;">粗集料</td>
+                <td style="width: 40%;">
+                    <a th:if="${design_record.coarseaggregate1variety != 'null'}"
+                       th:text="'粗集料1品种：'+${design_record.coarseaggregate1variety}"
+                       style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.coarseaggregate1model != 'null'}"
+                       th:text="'型号：'+${design_record.coarseaggregate1model}+'mm'"></a>
+                </td>
+                <td style="width: 40%;">
+                    <a th:if="${design_record.coarseaggregate2variety != 'null'}"
+                       th:text="'粗集料2品种：'+${design_record.coarseaggregate2variety}"
+                       style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.coarseaggregate2model != 'null'}"
+                       th:text="'型号：'+${design_record.coarseaggregate2model}+'mm'"></a>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 20%;">减水剂</td>
+                <td colspan="2">
+                    <a th:if="${design_record.reducewaterlevel != 'null'}"
+                       th:text="'品种等级：'+${design_record.reducewaterlevel}"
+                       style="display: inline-block;width: 230px;"></a>
+                    <a th:if="${design_record.reducerecommendamount != ''}"
+                       th:text="'推荐掺量：'+${design_record.reducerecommendamount}+'%'"
+                       style="display: inline-block;width: 105px;"></a>
+                    <a th:if="${design_record.reducewaterrate != ''}"
+                       th:text="'减水率：'+${design_record.reducewaterrate}+'%'"
+                       style="display: inline-block;width: 85px;"></a>
+                    <a th:if="${design_record.reducegascontent != ''}"
+                       th:text="'含气量：'+${design_record.reducegascontent}+'%'"
+                       style="display: inline-block;width: 85px;"></a>
+                    <a th:if="${design_record.reducecompress28d != ''}"
+                       th:text="'抗压强度比28d：'+${design_record.reducecompress28d}+'%'"
+                       style="display: inline-block;width: 130px;"></a>
+                    <a th:if="${design_record.reducebleedratio != ''}"
+                       th:text="'泌水率比：'+${design_record.reducebleedratio}+'%'"></a>
+                </td>
+            </tr>
+            <tr th:if="${design_record.flyashcategory != null} or ${design_record.flyashgrade !=null} or ${design_record.flyfineness != null} or ${design_record.flywaterneed != null} or ${design_record.flyloss != null} or ${design_record.fly28dactivity != null}">
+                <td style="width: 20%;">粉煤灰</td>
+                <td colspan="2">
+                    <a th:if="${design_record.flyashcategory != 'null'}"
+                       th:text="'类别：'+${design_record.flyashcategory}" style="display: inline-block;width: 75px;"></a>
+                    <a th:if="${design_record.flyashgrade != 'null'}"
+                       th:text="'品种等级：'+${design_record.flyashgrade}" style="display: inline-block;width: 115px;"></a>
+                    <a th:if="${design_record.flyfineness != ''}" th:text="'细度：'+${design_record.flyfineness}+'%'"
+                       style="display: inline-block;width: 85px;"></a>
+                    <a th:if="${design_record.flywaterneed != ''}" th:text="'需水量比：'+${design_record.flywaterneed}+'%'"
+                       style="display: inline-block;width: 105px;"></a>
+                    <a th:if="${design_record.flyloss != ''}" th:text="'烧失量：'+${design_record.flyloss}+'%'"
+                       style="display: inline-block;width: 85px;"></a>
+                    <a th:if="${design_record.fly28dactivity != ''}"
+                       th:text="'28d活性指数：'+${design_record.fly28dactivity}+'%'"></a>
+                </td>
+            </tr>
+            <tr th:if="${design_record.slagpowdergrade != null} or ${design_record.slag28dactivity != null} or ${design_record.slagmanufacturer != null}">
+                <td style="width: 20%;">矿渣粉</td>
+                <td colspan="2">
+                    <a th:if="${design_record.slagpowdergrade != 'null'}"
+                       th:text="'品种等级：'+${design_record.slagpowdergrade}"
+                       style="display: inline-block;width: 105px;"></a>
+                    <a th:if="${design_record.slag28dactivity != ''}"
+                       th:text="'28d活性指数：'+${design_record.slag28dactivity}+'%'"
+                       style="display: inline-block;width: 125px;"></a>
+                    <a th:if="${design_record.slagmanufacturer != 'null'}"
+                       th:text="'生产厂家：'+${design_record.slagmanufacturer}"></a>
+                </td>
+            </tr>
+            <tr th:if="${design_record.limestonefineness != null} or ${design_record.limestonebluevalue != null} or ${design_record.limestone28dactivity != null}">
+                <td style="width: 20%;">石灰石粉</td>
+                <td colspan="2">
+                    <a th:if="${design_record.limestonefineness != ''}"
+                       th:text="'细度：'+${design_record.limestonefineness}+'%'"
+                       style="display: inline-block;width: 75px;"></a>
+                    <a th:if="${design_record.limestonebluevalue != ''}"
+                       th:text="'亚甲蓝值：'+${design_record.limestonebluevalue}+'g/kg'"
+                       style="display: inline-block;width: 115px;"></a>
+                    <a th:if="${design_record.limestone28dactivity != ''}"
+                       th:text="'28d活性指数：'+${design_record.limestone28dactivity}+'%'"></a>
+                </td>
+            </tr>
+            <tr th:if="${design_record.expansionmodel != null} or ${design_record.expansion28d != null} or ${design_record.expansionlimit != null}">
+                <td style="width: 20%;">膨胀剂</td>
+                <td colspan="2">
+                    <a th:if="${design_record.expansionmodel != 'null'}"
+                       th:text="'品种型号：'+${design_record.expansionmodel}"
+                       style="display: inline-block;width: 195px;"></a>
+                    <a th:if="${design_record.expansion28d != 'null'} and ${design_record.expansion28d != null}"
+                       th:text="'28d抗压强度：'+${design_record.expansion28d}+'MPa'"
+                       style="display: inline-block;width: 135px;"></a>
+                    <a th:if="${design_record.expansionlimit != 'null'} and ${design_record.expansionlimit != null}"
+                       th:text="'限制膨胀率：'+${design_record.expansionlimit}+'%'"></a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <form>
+        <span>
+            <h4>推荐配合比</h4>
+        </span>
+        <table id="record_3" class="table table-hover table-condensed table-bordered">
+            <tr>
+                <th>水泥</th>
+                <th>细集料1</th>
+                <th>细集料2</th>
+                <th>细集料3</th>
+                <th>粗集料1</th>
+                <th>粗集料2</th>
+                <th>粗集料3</th>
+                <th>水</th>
+                <th>减水剂</th>
+                <th>粉煤灰</th>
+                <th>矿渣粉</th>
+                <th>石灰石粉</th>
+                <th>膨胀剂</th>
+                <th>其它材料</th>
+                <th>预估28d抗压强度（MPa）</th>
+                <th>表观密度（kg/m³）</th>
+                <th>材料成本（元/方）</th>
+                <!--<th>分数</th>-->
+            </tr>
+            <tr th:each="iwhole:${#lists.size(sortbywhole)>0}? ${sortbywhole[0]}:${sortbywhole}">
+                <td th:text="${iwhole.cementconsumption != null}?${iwhole.cementconsumption}:'/'"></td>
+                <td th:text="${iwhole.fineaggregate1 != null}?${iwhole.fineaggregate1}:'/'"></td>
+                <td th:text="${iwhole.fineaggregate2 != null}?${iwhole.fineaggregate2}:'/'"></td>
+                <td th:text="${iwhole.fineaggregate3 != null}?${iwhole.fineaggregate3}:'/'"></td>
+                <td th:text="${iwhole.coarseaggregate1 != null}?${iwhole.coarseaggregate1}:'/'"></td>
+                <td th:text="${iwhole.coarseaggregate2 != null}?${iwhole.coarseaggregate2}:'/'"></td>
+                <td th:text="${iwhole.coarseaggregate3 != null}?${iwhole.coarseaggregate3}:'/'"></td>
+                <td th:text="${iwhole.waterconsumption != null}?${iwhole.waterconsumption}:'/'"></td>
+                <td th:text="${iwhole.waterreducingagentdosage != null}?${iwhole.waterreducingagentdosage}:'/'"></td>
+                <td th:text="${iwhole.flyashdosage != null}?${iwhole.flyashdosage}:'/'"></td>
+                <td th:text="${iwhole.slagpowderconsumption != null}?${iwhole.slagpowderconsumption}:'/'"></td>
+                <td th:text="${iwhole.limestonepowderconsumption != null}?${iwhole.limestonepowderconsumption}:'/'"></td>
+                <td th:text="${iwhole.expansionagentdosage != null}?${iwhole.expansionagentdosage}:'/'"></td>
+                <td th:text="${iwhole.specialmaterialdosage != null}?${iwhole.specialmaterialdosage}:'/'"></td>
+                <td th:text="${iwhole.intensity28d != null}?${iwhole.intensity28d}:'/'"></td>
+                <td th:text="${iwhole.apparentdensity != null}?${iwhole.apparentdensity}:'/'"></td>
+                <td th:text="${iwhole.materialcosts != null}?${iwhole.materialcosts}:'/'"></td>
+                <!--<td th:text="${iwhole.rating}">1456</td>-->
+            </tr>
+        </table>
+        <table id="record_4" class="table table-hover table-condensed table-bordered" style="display: none;">
+            <tr>
+                <th>水泥</th>
+                <th>细集料1</th>
+                <th>细集料2</th>
+                <th>细集料3</th>
+                <th>粗集料1</th>
+                <th>粗集料2</th>
+                <th>粗集料3</th>
+                <th>水</th>
+                <th>减水剂</th>
+                <th>粉煤灰</th>
+                <th>矿渣粉</th>
+                <th>石灰石粉</th>
+                <th>膨胀剂</th>
+                <th>其它材料</th>
+                <th>预估28d抗压强度（MPa）</th>
+                <th>表观密度（kg/m³）</th>
+                <th>材料成本（元/方）</th>
+                <!--<th>分数</th>-->
+            </tr>
+            <tr th:each="iwhole:${sortbywhole}">
+                <td th:text="${iwhole.cementconsumption != null}?${iwhole.cementconsumption}:'/'"></td>
+                <td th:text="${iwhole.fineaggregate1 != null}?${iwhole.fineaggregate1}:'/'"></td>
+                <td th:text="${iwhole.fineaggregate2 != null}?${iwhole.fineaggregate2}:'/'"></td>
+                <td th:text="${iwhole.fineaggregate3 != null}?${iwhole.fineaggregate3}:'/'"></td>
+                <td th:text="${iwhole.coarseaggregate1 != null}?${iwhole.coarseaggregate1}:'/'"></td>
+                <td th:text="${iwhole.coarseaggregate2 != null}?${iwhole.coarseaggregate2}:'/'"></td>
+                <td th:text="${iwhole.coarseaggregate3 != null}?${iwhole.coarseaggregate3}:'/'"></td>
+                <td th:text="${iwhole.waterconsumption != null}?${iwhole.waterconsumption}:'/'"></td>
+                <td th:text="${iwhole.waterreducingagentdosage != null}?${iwhole.waterreducingagentdosage}:'/'"></td>
+                <td th:text="${iwhole.flyashdosage != null}?${iwhole.flyashdosage}:'/'"></td>
+                <td th:text="${iwhole.slagpowderconsumption != null}?${iwhole.slagpowderconsumption}:'/'"></td>
+                <td th:text="${iwhole.limestonepowderconsumption != null}?${iwhole.limestonepowderconsumption}:'/'"></td>
+                <td th:text="${iwhole.expansionagentdosage != null}?${iwhole.expansionagentdosage}:'/'"></td>
+                <td th:text="${iwhole.specialmaterialdosage != null}?${iwhole.specialmaterialdosage}:'/'"></td>
+                <td th:text="${iwhole.intensity28d != null}?${iwhole.intensity28d}:'/'"></td>
+                <td th:text="${iwhole.apparentdensity != null}?${iwhole.apparentdensity}:'/'"></td>
+                <td th:text="${iwhole.materialcosts != null}?${iwhole.materialcosts}:'/'"></td>
+                <!--<td th:text="${iwhole.rating}">1456</td>-->
+            </tr>
+        </table>
+        <!--<input id="websocketUrl_json" type="hidden"/>-->
+        <div align="center">
+            <button type="button" class="btn btn-primary" id="moreResult" onclick="get_more();">更多结果</button>
+        </div>
+
+    </form>
+</div>
+
+
+<script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="/js/H-ui.min.js"></script>
+<script type="text/javascript" src="/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="/lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+    function add_more() {
+        var tb = document.getElementById("record_3");
+        for (var j = 2; 11 > j; j++) {
+            var tr = tb.insertRow(j);
+            var td = tr.insertCell();
+            td.innerHTML = '单方用量（kg）';
+            var td2 = tr.insertCell();
+            td2.innerHTML = '95';
+            var td3 = tr.insertCell();
+            td3.innerHTML = '93';
+            var td4 = tr.insertCell();
+            td4.innerHTML = '91';
+            var td5 = tr.insertCell();
+            td5.innerHTML = '80';
+            var td6 = tr.insertCell();
+            td6.innerHTML = '70';
+            var td7 = tr.insertCell();
+            td7.innerHTML = '65';
+            var td8 = tr.insertCell();
+            td8.innerHTML = '73';
+            var td9 = tr.insertCell();
+            td9.innerHTML = '86';
+            var td10 = tr.insertCell();
+            td10.innerHTML = '94';
+            var td11 = tr.insertCell();
+            td11.innerHTML = '93.5';
+            var td12 = tr.insertCell();
+            td12.innerHTML = '94';
+            var td13 = tr.insertCell();
+            td13.innerHTML = '84';
+            var td14 = tr.insertCell();
+            td14.innerHTML = '95';
+            var td15 = tr.insertCell();
+            td15.innerHTML = '96';
+            var td16 = tr.insertCell();
+            td16.innerHTML = '100';
+            var td17 = tr.insertCell();
+            td17.innerHTML = '12.5';
+            var td18 = tr.insertCell();
+            td18.innerHTML = '156';
+            // var td19 = tr.insertCell();
+            // td19.innerHTML = '100';
+        }
+    }
+
+    function get_more() {
+        document.getElementById('record_3').style.display = 'none';
+        document.getElementById('record_4').style.display = '';
+        document.getElementById('moreResult').style.display = 'none';
+    }
+
+    function btnChange(value) {
+        if (value == "1") {
+            document.getElementById('record_1').style.display = '';
+            document.getElementById('record_2').style.display = 'none';
+            document.getElementById('record_3').style.display = 'none';
+        }
+        if (value == "2") {
+            document.getElementById('record_1').style.display = 'none';
+            document.getElementById('record_2').style.display = '';
+            document.getElementById('record_3').style.display = 'none';
+        }
+        if (value == "3") {
+            document.getElementById('record_1').style.display = 'none';
+            document.getElementById('record_2').style.display = 'none';
+            document.getElementById('record_3').style.display = '';
+        }
+    }
+</script>
+</body>
+</html>
